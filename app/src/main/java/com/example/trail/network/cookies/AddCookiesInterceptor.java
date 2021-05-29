@@ -32,9 +32,9 @@ public class AddCookiesInterceptor implements Interceptor {
             builder.addHeader("Cookie", cookie);
         }
 
-        String userSn = appPreferencesHelper.getUserSn();
-        if (userSn != null)         // fixme: match key in database (server doc)
-            builder.addHeader("USER_SN", userSn);
+        String userID = appPreferencesHelper.getUserID();
+        if (userID != null)         // fixme: match key in database (server doc)
+            builder.addHeader("USER_ID", userID);
 
         //todo 더 추가
         // todo Web, Android, iOS 구분을 위해 User-Agent setting

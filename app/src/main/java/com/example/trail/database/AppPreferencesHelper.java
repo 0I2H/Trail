@@ -3,6 +3,8 @@ package com.example.trail.database;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.trail.model.user.UserDTO;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +37,18 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public String getUserSn() {
-        return sharedPreferences.getString("USER_SN", null);
+    public String getUserID() {
+        return sharedPreferences.getString("USER_ID", null);
+    }
+
+    public void setUserAuth(UserDTO userDTO) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("USER_ID", userDTO.getUserId());
+        editor.putString("EMAIL", userDTO.getEmail());
+        editor.putString("NICKNAME", userDTO.getUserName());
+        editor.putString("USER_IMG", userDTO.getUserImg());
+        editor.putString("JOURNEY_TYPE", userDTO.getJourneyType());
+        editor.putString("LIFE_STYLE", userDTO.getLifeStyle());
+        editor.apply();
     }
 }

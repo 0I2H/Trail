@@ -9,5 +9,5 @@ public interface PreferencesHelper {
 
     void setCookie(HashSet<String> cookie);
 
-    String getUserSn();
+    String getUserID();
 }

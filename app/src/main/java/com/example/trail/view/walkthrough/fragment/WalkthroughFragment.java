@@ -1,4 +1,6 @@
 package com.example.trail.view.walkthrough.fragment;
 
-public class OnboardingSupportFragment {
+import androidx.fragment.app.Fragment;
+
+public class WalkthroughFragment extends Fragment {
 }

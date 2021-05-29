@@ -1,4 +1,4 @@
-package com.example.trail.view;
+package com.example.trail.view.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 

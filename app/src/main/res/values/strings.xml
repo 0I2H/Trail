@@ -1,0 +1,14 @@
+<resources>
+    /* general */
+    <string name="app_name">Trail</string>
+
+
+    /* login */
+    <string name="heading_login">Login</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="button_forgot_password">Forgot Password?</string>
+    <string name="text_create_account">OR Create Account</string>
+    <string name="button_sign_up">Join</string>
+
+</resources>

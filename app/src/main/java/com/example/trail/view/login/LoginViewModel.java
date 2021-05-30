@@ -21,7 +21,7 @@ public class LoginViewModel extends BaseViewModel {
 
     public static final String TAG = "LoginViewModel";
 
-    private final MutableLiveData<Boolean> loginClicked;
+    private final MutableLiveData<Boolean> loginClicked, signUpClicked, findPasswordClicked;
     private final MutableLiveData<LoginDTO> loginLiveData;
     private final MutableLiveData<UserDTO> userAuthLiveData;
 
@@ -32,6 +32,8 @@ public class LoginViewModel extends BaseViewModel {
     public LoginViewModel(SavedStateHandle savedStateHandle) {
         super(savedStateHandle);
         this.loginClicked = new MutableLiveData<>(false);
+        this.signUpClicked = new MutableLiveData<>(false);
+        this.findPasswordClicked = new MutableLiveData<>(false);
         this.loginLiveData = new MutableLiveData<>();
         this.userAuthLiveData = new MutableLiveData<>();
     }
@@ -48,12 +50,28 @@ public class LoginViewModel extends BaseViewModel {
         return userAuthLiveData;
     }
 
+    public MutableLiveData<Boolean> getSignUpClicked() {
+        return signUpClicked;
+    }
+
+    public MutableLiveData<Boolean> getFindPasswordClicked() {
+        return findPasswordClicked;
+    }
+
     public void setContext(Context context) {
         this.context = context;
     }
 
     public void onLoginClick() {
         loginClicked.setValue(true);
+    }
+
+    public void onSignUpClick() {
+        signUpClicked.setValue(true);
+    }
+
+    public void onChangePasswordClick() {
+        findPasswordClicked.setValue(true);
     }
 
     public void requestLogin(LoginDTO loginDTO) {
@@ -93,10 +111,5 @@ public class LoginViewModel extends BaseViewModel {
         loginClicked.setValue(state);
     }
 
-    public void onChangePasswordClick() {
-    }
 
-    public void onSignUpClick() {
-
-    }
 }

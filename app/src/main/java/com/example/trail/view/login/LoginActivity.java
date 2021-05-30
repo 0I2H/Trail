@@ -2,7 +2,9 @@ package com.example.trail.view.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.SavedStateViewModelFactory;
@@ -14,6 +16,7 @@ import com.example.trail.base.BaseActivity;
 import com.example.trail.databinding.ActivityLoginBinding;
 import com.example.trail.model.login.LoginDTO;
 import com.example.trail.view.main.MainActivity;
+import com.example.trail.view.signup.SignUpActivity;
 import com.example.trail.view.walkthrough.WalkthroughActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -69,11 +72,26 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
             }
         });
 
+        viewModel.getSignUpClicked().observe(this, state -> {
+            if (state) {     // signUpBtn clicked
+                goToSignUpActivity();
+            }
+        });
+
+        viewModel.getFindPasswordClicked().observe(this, state -> {
+            if (state) {     // loginBtn clicked
+                goToFindPasswordActivity();
+            }
+        });
+
 
         viewModel.getLoginLiveData().observe(this, result -> {
             if(result.isLogin()) {        // login successful
                  viewModel.requestUserAuth();
                  goToMainActivity();
+            } else {
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT);
+                Log.i(TAG, "Login failed");
             }
         });
 
@@ -91,7 +109,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     // fixme
     /** If there is a 기록 진행중인 'trail' */
     public void goToDashBoard() {
-//        Intent intent = new Intent(this, aldksfslkjsl);
+//     todo   Intent intent = new Intent(this, aldksfslkjsl);
+//        startActivity(intent);
     }
 
     public void showWalkThrough() {
@@ -100,6 +119,13 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         startActivity(intent);
     }
 
+    public void goToSignUpActivity() {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+    }
 
-
+    public void goToFindPasswordActivity() {
+//        Intent intent = new Intent(this, FindPasswordActivity.class);
+//        startActivity(intent);
+    }
 }

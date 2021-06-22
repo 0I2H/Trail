@@ -13,9 +13,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.trail.BR;
 import com.example.trail.R;
 import com.example.trail.base.BaseActivity;
+import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.databinding.ActivityLoginBinding;
 import com.example.trail.model.login.LoginDTO;
 import com.example.trail.network.helper.NetworkHelper;
+import com.example.trail.view.dashboard.DashboardActivity;
 import com.example.trail.view.main.MainActivity;
 import com.example.trail.view.signup.SignUpActivity;
 import com.example.trail.view.walkthrough.WalkthroughActivity;
@@ -31,6 +33,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
 
     // DI
     LoginViewModel viewModel;
+    @Inject
+    AppPreferencesHelper appPreferencesHelper;
     @Inject
     NetworkHelper networkHelper;
 
@@ -59,7 +63,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(this.getApplication(), this)).get(LoginViewModel.class);
-        viewModel.setContext(getApplicationContext());
         viewModel.setNetworkHelper(networkHelper);
 
         binding = getViewDataBinding();
@@ -81,6 +84,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
                     loginDTO = new LoginDTO(emailValue, binding.passwordInput.getText().toString());
                     viewModel.requestLogin(loginDTO);
                 } else {    // address is invalid
+                    binding.emailTextInputLayout.setError(getString(R.string.email_format_error));
                     viewModel.setLoginClicked(false);
                 }
             }
@@ -102,8 +106,12 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
 
         viewModel.getLoginLiveData().observe(this, result -> {
             if(result.isLogin()) {        // login successful
-                 viewModel.requestUserAuth();
-                 goToMainActivity();
+//                 viewModel.requestUserAuth();
+                // save user account information
+                appPreferencesHelper.setUserAuth(result.user);
+
+                // TODO check if there is valid trail
+                goToDashBoard();
             } else {
                 Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT);
                 Log.i(TAG, "Login failed");
@@ -111,8 +119,12 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
         });
 
         viewModel.getUserAuthLiveData().observe(this, userDTO -> {
-            if(!userDTO.isAuth)     // successfully saved data to sharedPreference
-                goToMainActivity();
+            if(userDTO.isAuth) {    // successfully saved data to sharedPreference
+                //...
+
+//            fixme    goToMainActivity();
+                goToDashBoard();
+            }
         });
     }
 
@@ -124,8 +136,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     // fixme
     /** If there is a 기록 진행중인 'trail' */
     public void goToDashBoard() {
-//     todo   Intent intent = new Intent(this, aldksfslkjsl);
-//        startActivity(intent);
+        Intent intent = new Intent(this, DashboardActivity.class);
+        startActivity(intent);
     }
 
     public void showWalkThrough() {

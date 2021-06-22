@@ -1,6 +1,7 @@
 package com.example.trail.view.dashboard;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,16 +20,15 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
-import static com.example.trail.constants.AppConstants.KEY_REQUESTING_LOCATION_UPDATES;
+import static com.example.trail.constants.AppConstants.PREF_KEY_LOCATION_SERVICE_STATE;
+
 
 @HiltViewModel
-public class DashboardViewModel extends BaseViewModel implements SharedPreferences.OnSharedPreferenceChangeListener {
+//public class DashboardViewModel extends BaseViewModel implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class DashboardViewModel extends BaseViewModel {
 
     public static final String TAG = "DashboardViewModel";
 
-    private Context context;
-
-    AppPreferencesHelper appPreferencesHelper;
 
     private final MutableLiveData<PinDTO> pinLiveData;
     private final MutableLiveData<Integer> pinLoggingState;        /** -2: empty, -1: stop, 0: pause, 1: start */
@@ -70,25 +70,16 @@ public class DashboardViewModel extends BaseViewModel implements SharedPreferenc
 
     }
 
-    public Context getContext() {
-        return context;
+    public void setServiceState (int state) {
+        pinLoggingState.setValue(state);
     }
-
-    public void setContext(Context context) {
-        this.context = context;
-        if(context != null) {
-            appPreferencesHelper = new AppPreferencesHelper(context);
-            /*TODO*/ //fixme: activity에서 현재 서비스 상태 받아올것
-            int state = appPreferencesHelper.getLocationTrackingPref() ? 1 : -2;
-            pinLoggingState.setValue(state);
-        }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Update the buttons state depending on whether location updates are being requested
-        if (key.equals(KEY_REQUESTING_LOCATION_UPDATES)) {
-//            setButtonsState(sharedPreferences.getBoolean(KEY_REQUESTING_LOCATION_UPDATES, false));
-        }
-    }
+//
+//    @Override
+//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+//        // Update the buttons state depending on whether location updates are being requested
+//        if (key.equals(PREF_KEY_LOCATION_SERVICE_STATE)) {
+////            setButtonsState(sharedPreferences.getBoolean(KEY_REQUESTING_LOCATION_UPDATES, false));
+//            setServiceState(sharedPreferences.getInt(PREF_KEY_LOCATION_SERVICE_STATE, -2));
+//        }
+//    }
 }

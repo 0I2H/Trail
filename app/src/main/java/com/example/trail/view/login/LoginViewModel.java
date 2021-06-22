@@ -33,8 +33,8 @@ public class LoginViewModel extends BaseViewModel {
     private final MutableLiveData<LoginDTO> loginLiveData;
     private final MutableLiveData<UserDTO> userAuthLiveData;
 
-    @SuppressLint("StaticFieldLeak")
-    private Context context;
+//    @SuppressLint("StaticFieldLeak")
+//    private Context context;
 
     @Inject
     public LoginViewModel(SavedStateHandle savedStateHandle) {
@@ -44,11 +44,6 @@ public class LoginViewModel extends BaseViewModel {
         this.findPasswordClicked = new MutableLiveData<>(false);
         this.loginLiveData = new MutableLiveData<>();
         this.userAuthLiveData = new MutableLiveData<>();
-
-        // FIXME 임시(temp)
-//        networkHelper = new N
-
-        this.setNetworkHelper(networkHelper);
     }
 
     public MutableLiveData<Boolean> getLoginClicked() {
@@ -71,10 +66,6 @@ public class LoginViewModel extends BaseViewModel {
         return findPasswordClicked;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
     public void onLoginClick() {
         loginClicked.setValue(true);
     }
@@ -94,11 +85,14 @@ public class LoginViewModel extends BaseViewModel {
                     .subscribeOn(getNetworkHelper().getSchedulerIo())
                     .observeOn(getNetworkHelper().getSchedulerUi())
                     .subscribe(login -> {
+                        Log.i(TAG, String.valueOf(login.isLogin()));
                         loginLiveData.setValue(login);
-                        if(login.isLogin) {         // if login was successful,
-                            requestUserAuth();      // get user info (userAuthLiveData)
-                            loginClicked.setValue(false);
-                        }
+//                        if(login.isLogin) {         // if login was successful,
+//                            requestUserAuth();      // get user info (userAuthLiveData)
+//                            loginClicked.setValue(false);
+//                        } else {
+//                            loginClicked.setValue(false);
+//          ㅁ              }
                     }, throwable -> Log.e(TAG, throwable.getMessage())));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -110,6 +104,7 @@ public class LoginViewModel extends BaseViewModel {
                 .subscribeOn(getNetworkHelper().getSchedulerIo())
                 .observeOn(getNetworkHelper().getSchedulerUi())
                 .subscribe(userDTO -> {
+                    Log.i(TAG, userDTO.toString());
                     if(userDTO.isAuth) {
                         // Update userAuth data to device
 //        todo (아래방식으로 해도 di 때문에 정상작동되는지)                AppPreferencesHelper preferencesHelper = new AppPreferencesHelper(context);
@@ -117,21 +112,14 @@ public class LoginViewModel extends BaseViewModel {
                         appPreferencesHelper.setUserAuth(userDTO);
 
                         userAuthLiveData.setValue(userDTO);     // todo unnessassary?
-                    } else
+                    } else {
+                        Log.i(TAG, userDTO.toString());
                         Log.i(TAG, "ERROR: Unable to retrieve userAuth data");
+                    }
                 }, throwable -> Log.e(TAG, throwable.getMessage())));
     }
 
     public void setLoginClicked(boolean state) {
         loginClicked.setValue(state);
     }
-
-
-
-    public void test() {
-        Log.i(TAG, "ksjfdl");
-    }
-
-
-
 }

@@ -42,8 +42,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.example.trail.constants.AppConstants.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST;
 import static com.example.trail.constants.AppConstants.EXTRA_LOCATION;
-import static com.example.trail.constants.AppConstants.KEY_REQUESTING_LOCATION_UPDATES;
-import static com.example.trail.constants.AppConstants.PREFS_NAME;
+import static com.example.trail.constants.AppConstants.PREF_KEY_LOCATION_SERVICE_STATE;
 import static com.example.trail.utils.Utils.locationToText;
 
 @AndroidEntryPoint
@@ -54,6 +53,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     DashboardViewModel viewModel;
     private ActivityDashboardBinding binding;
 
+    @Inject
     AppPreferencesHelper appPreferencesHelper;
 
     // Used in checking for runtime permissions.
@@ -86,7 +86,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(this.getApplication(), this)).get(DashboardViewModel.class);
-        viewModel.setContext(this);
+//        viewModel.setContext(this);
 
         binding = getViewDataBinding();
         binding.setViewModel(viewModel);
@@ -163,7 +163,10 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
                     break;
 
                 case -2:
-                    Log.e(TAG, "Empty path");
+                    Log.i(TAG, "Empty path");
+                    setButtonsState(-2);
+                    break;
+
                 default:
                     Log.e(TAG, "Invalid data in pinLoggingState livedata");
                     setButtonsState(-2);
@@ -200,10 +203,13 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // 06.03 VM으로 옮겨짐
         // todo 지우고 해결할 것
-//        // Update the buttons state depending on whether location updates are being requested
-//        if (key.equals(KEY_REQUESTING_LOCATION_UPDATES)) {
-//            setButtonsState(sharedPreferences.getBoolean(KEY_REQUESTING_LOCATION_UPDATES, false));
-//        }
+        // Update the buttons state depending on whether location updates are being requested
+        if (key.equals(PREF_KEY_LOCATION_SERVICE_STATE)) {
+            int state = sharedPreferences.getInt(PREF_KEY_LOCATION_SERVICE_STATE, -2);
+//            setButtonsState(state);
+            viewModel.setServiceState(state);
+        }
+
     }
 
 

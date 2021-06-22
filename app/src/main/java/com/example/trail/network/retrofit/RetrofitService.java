@@ -20,7 +20,6 @@ public interface RetrofitService {
     );
 
     @GET("/api/user/auth")
-    @FormUrlEncoded
     Single<UserDTO> authUser();
 
 }

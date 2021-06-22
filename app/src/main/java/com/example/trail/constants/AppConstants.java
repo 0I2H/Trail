@@ -16,7 +16,7 @@ public class AppConstants {
 
 
 
-    public static final String KEY_REQUESTING_LOCATION_UPDATES = "requesting_location_updates";
+    public static final String PREF_KEY_LOCATION_SERVICE_STATE = "PREF_KEY_LOCATION_SERVICE_STATE";
 
 
 

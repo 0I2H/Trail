@@ -28,6 +28,8 @@
     <string name="text_create_account">OR Create Account</string>
     <string name="button_sign_up">JOIN</string>
 
+    <string name="email_format_error">Not a valid E-mail format</string>
+
     /* sign up */
     <string name="heading_signup">Sign Up</string>
     <string name="verify_password">Re-enter Password</string>

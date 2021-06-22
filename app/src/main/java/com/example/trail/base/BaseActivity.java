@@ -18,13 +18,14 @@ import com.example.trail.view.splash.SplashViewModel;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import dagger.hilt.android.scopes.ActivityScoped;
 
 /** https://github.com/MindorksOpenSource/android-mvvm-architecture */
 // Activity 별로 extend해가면 됨
 // XML View Binding과 ViewModel을 그 Activity와 연결해줌
 public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseViewModel> extends AppCompatActivity implements BaseFragment.Callback {
 
-//    @Inject
+
     NetworkHelper networkHelper;
 //    @Inject
     AppPreferencesHelper appPreferencesHelper;
@@ -69,7 +70,7 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
         //(Hilt로 변경, 이 방식은 dagger2 ->)   performDependencyInjection();       // 순서?: before super.onCreate()이어야 함 (공식문서참고)
         performDataBinding();
         // fixme 필요하면,주석해제
-        //  initBaseActivity();
+//          initBaseActivity();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  // why?
 //        observeViewModel();     // 06.03 이렇게 불러야 추가됐었던건가
 

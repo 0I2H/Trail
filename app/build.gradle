@@ -47,7 +47,8 @@ dependencies {
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit2Version"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit2Version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofit2Version"
+    implementation "com.squareup.retrofit2:adapter-rxjava3:$rootProject.ext.retrofit2Version"
+
 
     // reactive
     implementation 'io.reactivex.rxjava3:rxjava:3.0.13-RC4'

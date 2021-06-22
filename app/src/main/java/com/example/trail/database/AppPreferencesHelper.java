@@ -24,7 +24,11 @@ public class AppPreferencesHelper implements PreferencesHelper {
     SharedPreferences sharedPreferences;
 
     private static final String PREF_KEY_COOKIE_NAME = "PREF_KEY_COOKIE_NAME";
+
+    // true: is foreground service / false: service is stopped, or mainactivity is on focus
     private static final String PREF_KEY_LOCATION_SERVICE_FOREGROUND_ENABLED = "PREF_KEY_LOCATION_SERVICE_FOREGROUND_ENABLED";
+    // -2: error or 'empty path' / -1: stopped locating / 0: paused locating / 1: locating
+    private static final String PREF_KEY_LOCATION_SERVICE_STATE = "PREF_KEY_LOCATION_SERVICE_STATE";
 
     public AppPreferencesHelper(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -47,18 +51,19 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public String getUserID() {
-        return sharedPreferences.getString("USER_ID", null);
+    public int getUserID() {
+        return sharedPreferences.getInt("USER_ID", -1);
     }
 
     public void setUserAuth(UserDTO userDTO) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("USER_ID", userDTO.getUserId());
-        editor.putString("EMAIL", userDTO.getEmail());
+        editor.putString("EMAIL", userDTO.getEmail());  // todo 지우기?
         editor.putString("NICKNAME", userDTO.getUserName());
         editor.putString("USER_IMG", userDTO.getUserImg());
         editor.putString("JOURNEY_TYPE", userDTO.getJourneyType());
         editor.putString("LIFE_STYLE", userDTO.getLifeStyle());
+        //todo 'token' 추가? --> cookie에 동일 정보 있긴 함
         editor.apply();
     }
 
@@ -71,13 +76,23 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     /**
+     * Returns true if requesting location updates, otherwise returns false.
+     */
+    @Override
+    public int getLocationTrackingState() {
+        return sharedPreferences.getInt(PREF_KEY_LOCATION_SERVICE_STATE, -2);
+    }
+
+    /**
      * Stores the location updates state in SharedPreferences.
      * @param requestingLocationState The location updates state.
      */
     @Override
     public void saveLocationTrackingPref(int requestingLocationState) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(PREF_KEY_LOCATION_SERVICE_FOREGROUND_ENABLED, requestingLocationState);
+        boolean state = requestingLocationState < 1;
+        editor.putBoolean(PREF_KEY_LOCATION_SERVICE_FOREGROUND_ENABLED, state);
+        editor.putInt(PREF_KEY_LOCATION_SERVICE_STATE, requestingLocationState);
         editor.apply();
 
         // https://github.com/android/location-samples/blob/main/LocationUpdatesForegroundService/app/src/main/java/com/google/android/gms/location/sample/locationupdatesforegroundservice/Utils.java

@@ -1,11 +1,15 @@
 package com.example.trail.model.login;
 
+import com.example.trail.model.user.UserDTO;
+
 import java.io.Serializable;
 
 public class LoginDTO implements Serializable {
     public String email;
     public String password;
     public boolean isLogin = false;
+    public String message;
+    public UserDTO user;
 
     public LoginDTO(String email, String password) {
         this.email = email;

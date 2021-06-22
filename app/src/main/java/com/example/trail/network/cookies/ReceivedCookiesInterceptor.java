@@ -21,12 +21,8 @@ public class ReceivedCookiesInterceptor implements Interceptor {
         Response originalResponse = chain.proceed(chain.request());
 //        BufferedSource source = originalResponse.body().source();
 
-        if (!originalResponse.headers("Set-Cookie").isEmpty()) { // fixme: 인자이름
+        if (!originalResponse.headers("Set-Cookie").isEmpty()) { // fix: 인자이름 (06.22 맞음)
             HashSet<String> cookies = new HashSet<>(originalResponse.headers("Set-Cookie"));
-//    (동일)        HashSet<String> cookies = new HashSet<>();
-//            for (String header : originalResponse.headers("Set-Cookie")) {
-//                cookies.add(header);
-//            }
 
             // Preference에 cookies를 넣어주는 작업을 수행
             appPreferencesHelper.setCookie(cookies);

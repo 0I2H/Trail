@@ -24,6 +24,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.trail.R;
 import com.example.trail.database.AppPreferencesHelper;
+import com.example.trail.model.login.LoginDTO;
+import com.example.trail.network.helper.NetworkHelper;
 import com.example.trail.utils.Utils;
 import com.example.trail.view.dashboard.DashboardActivity;
 import com.google.android.gms.common.util.SharedPreferencesUtils;
@@ -40,6 +42,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import dagger.hilt.InstallIn;
+import dagger.hilt.android.scopes.ServiceScoped;
+import dagger.hilt.internal.ComponentEntryPoint;
+
 import static com.example.trail.constants.AppConstants.EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION;
 import static com.example.trail.constants.AppConstants.EXTRA_LOCATION;
 
@@ -48,10 +54,13 @@ import static com.example.trail.constants.AppConstants.EXTRA_LOCATION;
  * code from 'https://codelabs.developers.google.com/codelabs/while-in-use-location/#1'
  * (2021.05.31)
  */
+@ServiceScoped
 public final class PinLocationService extends Service {
 
     @Inject
     AppPreferencesHelper appPreferencesHelper;
+    @Inject
+    NetworkHelper networkHelper;
 
 
     /* (별거 아님)
@@ -110,8 +119,14 @@ public final class PinLocationService extends Service {
                 // if a Notification is created (when the user navigates away from app).
                 /** 사용자 현재 위치 */
                 currentLocation = locationResult.getLastLocation();
-                // TODO: 이 정보 데이터베이스에 저장하기 (PinsDBControl)
+
                 Toast.makeText(getApplicationContext(), "위도: " + String.valueOf(currentLocation.getLatitude()) + "\n경도: " + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                // TODO: 이 정보 데이터베이스에 저장하기 (PinsDBControl)
+                /** changes */
+                // Sends location to server
+//                networkHelper.
+
+
 
                 // Notify our Activity that a new location was added. Again, if this was a
                 // production app, the Activity would be listening for changes to a database
@@ -295,4 +310,25 @@ public final class PinLocationService extends Service {
             return PinLocationService.this;
         }
     }
+
+// TODO    public void requestLogin(LoginDTO loginDTO) {
+//        try {
+//            getCompositeDisposable()
+//                    .add(getRetrofitService().loginUser(loginDTO.getEmail(), loginDTO.getPassword())
+//                            .subscribeOn(getNetworkHelper().getSchedulerIo())
+//                            .observeOn(getNetworkHelper().getSchedulerUi())
+//                            .subscribe(login -> {
+//                                Log.i(TAG, String.valueOf(login.isLogin()));
+//                                loginLiveData.setValue(login);
+////                        if(login.isLogin) {         // if login was successful,
+////                            requestUserAuth();      // get user info (userAuthLiveData)
+////                            loginClicked.setValue(false);
+////                        } else {
+////                            loginClicked.setValue(false);
+////          ㅁ              }
+//                            }, throwable -> Log.e(TAG, throwable.getMessage())));
+//        } catch (Exception e) {
+//            Log.e(TAG, e.getMessage());
+//        }
+//    }
 }

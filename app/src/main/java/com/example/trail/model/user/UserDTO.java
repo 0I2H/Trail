@@ -13,7 +13,7 @@ public class UserDTO implements Serializable {
     public String journeyType;
     public String lifeStyle;
 
-    public String deviceToken;
+    public String token;
     public String preferences;
     public boolean recording;
     public boolean marketing;
@@ -22,6 +22,9 @@ public class UserDTO implements Serializable {
     public boolean error;
 
     // todo Constructor
+    public UserDTO() {
+
+    }
 
 
     public boolean isAuth() {
@@ -88,12 +91,12 @@ public class UserDTO implements Serializable {
         this.lifeStyle = lifeStyle;
     }
 
-    public String getDeviceToken() {
-        return deviceToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getPreferences() {

@@ -43,14 +43,16 @@
             android:paddingBottom="20dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordTextInputLayout1"
+                android:id="@+id/email_text_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconDrawable="@drawable/ic_logo"
                 app:endIconCheckable="true"
-                app:endIconTint="@color/black">
+                app:endIconTint="@color/black"
+                app:errorEnabled="true"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email_input"
@@ -59,17 +61,16 @@
                     android:hint="@string/hint_email"
                     android:textSize="14sp"
                     android:padding="10dp"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordTextInputLayout"
+                android:id="@+id/password_text_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeWidth="0dp"
-                app:boxBackgroundColor="@color/white"
+                app:boxStrokeWidth="1dp"
                 app:hintAnimationEnabled="true"
                 app:helperTextEnabled="true"
                 app:helperText="비밀번호"
@@ -79,6 +80,7 @@
                 app:boxCornerRadiusTopStart="10dp"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/highlight">
+<!--                app:boxBackgroundColor="@color/white"-->
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password_input"
@@ -111,11 +113,6 @@
                 app:tint="@color/white"
                 android:onClick="@{() -> viewModel.onLoginClick()}"/>
 <!--            android:clickable="@{viewModel.loginClicked}"-->
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:onClick="@{() -> viewModel.test()}"/>
 
         </LinearLayout>
 

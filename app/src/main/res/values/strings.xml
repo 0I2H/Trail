@@ -1,0 +1,46 @@
+<resources>
+    /* application */
+    <string name="app_name">Trail</string>
+
+
+    <string name="location_permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
+
+    /* notification */
+    <string name="location_service_channel_title">New Pin Location</string>
+
+
+    /* general */
+    <string name="ok">OK</string>
+    <string name="settings">Settings</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="Profile">Profile</string>
+    <string name="Preferences">Preferences</string>
+    <string name="next">Next</string>
+    
+    /* login */
+    <string name="heading_login">Login</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="button_forgot_password">Forgot Password?</string>
+    <string name="text_create_account">OR Create Account</string>
+    <string name="button_sign_up">JOIN</string>
+
+    /* sign up */
+    <string name="heading_signup">Sign Up</string>
+    <string name="verify_password">Re-enter Password</string>
+    <string name="hint_nickname">Nickname (~20 characters)</string>
+    <string name="button_set_preferences">Set Preferences</string>
+    <string name="account_created">Account Created</string>
+    <string name="button_complete">Complete</string>
+
+    /* dashboard */
+    <string name="heading_dashboard">Dashboard</string>
+
+
+
+
+
+</resources>

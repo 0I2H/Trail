@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.trail.view.dashboard.DashboardActivity">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.example.trail.view.dashboard.DashboardViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="100dp">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/highlight"
+            android:textStyle="bold"
+            android:textSize="36sp"
+            android:text="@string/heading_dashboard"
+            android:layout_marginBottom="50dp"/>
+
+        <Button
+            android:id="@+id/gps_test_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="start logging"
+            android:onClick="@{() -> viewModel.startLoggingService()}"/>
+
+        <Button
+            android:id="@+id/gps_test_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="log pause"
+            android:onClick="@{() -> viewModel.pauseLoggingService()}"/>
+
+        <Button
+            android:id="@+id/gps_test_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="abort"
+            android:onClick="@{() -> viewModel.stopLoggingService()}"/>
+    </LinearLayout>
+</layout>

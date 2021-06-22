@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=A1:DC:8C:9F:AF:A9:7C:31:3D:00:D6:63:9D:AA:3F:D8:69:DE:75:FD%3Bcom.example.googlemaptest
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.example.googlemaptest
+
+    SHA-1 certificate fingerprint:
+    A1:DC:8C:9F:AF:A9:7C:31:3D:00:D6:63:9D:AA:3F:D8:69:DE:75:FD
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+
+<!--    !이거 대신 gradle.properties에 정의해놨음-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCeDezNTdpuqy0zM7sM74I4opk4kmZhiV8</string>
+    <string name="map_id" translatable="false">4ecc2fa4c0c87e05</string>
+</resources>

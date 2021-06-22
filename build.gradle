@@ -1,0 +1,37 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.36"// 특이하게 app level이 아닌 project level gradle에 추가
+        classpath 'com.google.gms:google-services:4.3.8'
+
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+// For projects that include multiple modules,
+// it might be useful to define properties at the project level and share them across all modules.
+// (version management)
+ext {
+    // App dependencies
+    retrofit2Version = '2.9.0'
+    hiltVersion = '2.37'
+}

@@ -32,6 +32,7 @@ public class DashboardViewModel extends BaseViewModel {
 
     private final MutableLiveData<PinDTO> pinLiveData;
     private final MutableLiveData<Integer> pinLoggingState;        /** -2: empty, -1: stop, 0: pause, 1: start */
+    private final MutableLiveData<String> intentActionLiveData;
 
     @Inject
     public DashboardViewModel(SavedStateHandle savedStateHandle) {
@@ -41,6 +42,8 @@ public class DashboardViewModel extends BaseViewModel {
         /*임시*/
         this.pinLoggingState = new MutableLiveData<>();       // default value to 'stop'
 
+        this.intentActionLiveData = new MutableLiveData<>();
+
     }
 
     public MutableLiveData<PinDTO> getPinLiveData() {
@@ -49,6 +52,10 @@ public class DashboardViewModel extends BaseViewModel {
 
     public MutableLiveData<Integer> getPinLoggingState() {
         return pinLoggingState;
+    }
+
+    public MutableLiveData<String> getIntentActionLiveData() {
+        return intentActionLiveData;
     }
 
     public void startLoggingService() {
@@ -72,6 +79,18 @@ public class DashboardViewModel extends BaseViewModel {
 
     public void setServiceState (int state) {
         pinLoggingState.setValue(state);
+    }
+
+    public void goToProfileActivity() {
+        intentActionLiveData.setValue("ProfileActivity");
+    }
+
+    public void goToSettingsActivity() {
+        intentActionLiveData.setValue("SettingsActivity");
+    }
+
+    public void goToMapActivity () {
+        intentActionLiveData.setValue("MapActivity");
     }
 //
 //    @Override

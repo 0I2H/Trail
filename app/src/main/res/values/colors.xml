@@ -19,6 +19,8 @@
 
     <color name="black_mask">#11000000</color>
 
+    <color name="testing">#FF148D</color>
+
 
 
 </resources>

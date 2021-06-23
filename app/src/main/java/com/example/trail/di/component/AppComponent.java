@@ -1,17 +1,14 @@
-package com.example.trail.di;
-
-import android.content.Context;
+package com.example.trail.di.component;
 
 import com.example.trail.TrailApplication;
-import com.example.trail.network.helper.NetworkHelper;
+import com.example.trail.di.module.ActivityModule;
+import com.example.trail.di.module.AppModule;
+import com.example.trail.di.module.NetworkModule;
 
 import javax.inject.Singleton;
 
-import dagger.Binds;
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.hilt.DefineComponent;
-import dagger.hilt.components.SingletonComponent;
 
 @Singleton
 @Component(modules = {AppModule.class, ActivityModule.class, NetworkModule.class})

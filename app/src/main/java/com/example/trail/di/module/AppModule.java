@@ -1,4 +1,4 @@
-package com.example.trail.di;
+package com.example.trail.di.module;
 
 import android.content.Context;
 
@@ -16,18 +16,18 @@ import dagger.hilt.android.components.ServiceComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
-@InstallIn(SingletonComponent.class)
+@InstallIn({SingletonComponent.class, ServiceComponent.class})
 @Module
 public final class AppModule {
 
     @Provides
-    @Singleton
+//    @Singleton
     Context provideContext(@ApplicationContext Context appContext) {
         return appContext;
     }
 
     @Provides
-    @Singleton
+//    @Singleton
     AppPreferencesHelper provideAppPreferencesHelper (Context context) {
         return new AppPreferencesHelper(context);
     }

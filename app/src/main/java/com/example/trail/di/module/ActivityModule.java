@@ -1,4 +1,4 @@
-package com.example.trail.di;
+package com.example.trail.di.module;
 
 import com.example.trail.network.helper.NetworkHelper;
 import com.example.trail.network.retrofit.RetrofitService;

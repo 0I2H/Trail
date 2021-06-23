@@ -23,4 +23,5 @@ public class AppConstants {
     /* Intent Extra */
     public static final String EXTRA_LOCATION = "EXTRA_LOCATION";
     public static final String EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION = "EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION";
+    public static final String EXTRA_TRAIL_ID = "EXTRA_TRAIL_ID";
 }

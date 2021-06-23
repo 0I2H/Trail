@@ -18,8 +18,10 @@ public class UserDTO implements Serializable {
     public boolean recording;
     public boolean marketing;
 
-    // todo deprecate
-    public boolean error;
+    public boolean registerSuccess;
+    public String message;
+
+    public String image;
 
     // todo Constructor
     public UserDTO() {
@@ -107,6 +109,22 @@ public class UserDTO implements Serializable {
         this.preferences = preferences;
     }
 
+    public boolean isRegisterSuccess() {
+        return registerSuccess;
+    }
+
+    public void setRegisterSuccess(boolean registerSuccess) {
+        this.registerSuccess = registerSuccess;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public boolean isRecording() {
         return recording;
     }
@@ -121,5 +139,13 @@ public class UserDTO implements Serializable {
 
     public void setMarketing(boolean marketing) {
         this.marketing = marketing;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -33,6 +33,8 @@ import com.example.trail.base.BaseActivity;
 import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.databinding.ActivityDashboardBinding;
 import com.example.trail.service.PinLocationService;
+import com.example.trail.view.map.MapActivity;
+import com.example.trail.view.profile.ProfileActivity;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -42,6 +44,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.example.trail.constants.AppConstants.ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST;
 import static com.example.trail.constants.AppConstants.EXTRA_LOCATION;
+import static com.example.trail.constants.AppConstants.EXTRA_TRAIL_ID;
 import static com.example.trail.constants.AppConstants.PREF_KEY_LOCATION_SERVICE_STATE;
 import static com.example.trail.utils.Utils.locationToText;
 
@@ -61,7 +64,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     // The BroadcastReceiver used to listen from broadcasts from the service.
     private LocationServiceBroadcastReceiver broadcastReceiver;
     // A reference to the service used to get location updates.
-    private PinLocationService locationService = null;
+    public PinLocationService locationService = null;
     // Tracks the bound state of the service.
     private boolean boundState = false;
 
@@ -177,6 +180,24 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         // Bind to the service. If the service is in foreground mode, this signals to the service
         // that since this activity is in the foreground, the service can exit foreground mode.
         bindService(new Intent(this, PinLocationService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+
+        viewModel.getIntentActionLiveData().observe(this, action -> {
+            Intent intent;
+            switch (action) {
+                // TODO
+                case "ProfileActivity":
+                    intent = new Intent(this, ProfileActivity.class);
+//                    intent.putExtra();
+                    startActivity(intent);
+                    break;
+                case "SettingsActivity":
+                case "MapActivity":
+                    intent = new Intent(this, MapActivity.class);
+//                    intent.putExtra(EXTRA_TRAIL_ID, binding.);  // todo journeysId
+                    startActivity(intent);
+                    break;
+            }
+        });
     }
 
 

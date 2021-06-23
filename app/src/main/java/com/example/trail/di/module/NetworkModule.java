@@ -1,4 +1,4 @@
-package com.example.trail.di;
+package com.example.trail.di.module;
 
 import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.network.cookies.AddCookiesInterceptor;
@@ -7,6 +7,7 @@ import com.example.trail.network.helper.NetworkHelper;
 import com.example.trail.network.retrofit.RetrofitClient;
 import com.example.trail.network.retrofit.RetrofitService;
 import com.example.trail.reactive.AppRxScheduler;
+import com.example.trail.service.PinLocationService;
 
 import javax.inject.Singleton;
 
@@ -17,7 +18,7 @@ import dagger.hilt.android.components.ServiceComponent;
 import dagger.hilt.android.components.ViewComponent;
 import dagger.hilt.components.SingletonComponent;
 
-@InstallIn(SingletonComponent.class)
+@InstallIn({SingletonComponent.class, ServiceComponent.class})
 @Module
 public class NetworkModule {
 
@@ -31,13 +32,13 @@ public class NetworkModule {
         return new ReceivedCookiesInterceptor(appPreferencesHelper);
     }
 
-    @Singleton
+//    @Singleton
     @Provides
     RetrofitService provideRetrofitService (AddCookiesInterceptor addCookiesInterceptor, ReceivedCookiesInterceptor receivedCookiesInterceptor) {
         return new RetrofitClient(addCookiesInterceptor, receivedCookiesInterceptor).getService();
     }
 
-    @Singleton
+//    @Singleton
     @Provides
     NetworkHelper provideNetworkHelper (RetrofitService retrofitService, AppRxScheduler scheduler) {
         return new NetworkHelper(retrofitService, scheduler);

@@ -42,6 +42,8 @@
             android:exported="true"
             android:foregroundServiceType="location">
         </service>
+        
+        <receiver android:name=".service.GeofenceBroadcastReceiver" />
 
 
         <activity android:name=".view.splash.SplashActivity">

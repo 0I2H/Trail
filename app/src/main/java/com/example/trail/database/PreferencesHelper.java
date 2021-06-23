@@ -7,11 +7,15 @@ import java.util.Set;
 
 public interface PreferencesHelper {
 
+    boolean isFirstExecution();
+
     Set<String> getCookie();
 
     void setCookie(HashSet<String> cookie);
 
     int getUserID();
+
+    String getUserName();
 
     boolean getLocationTrackingPref();
 
@@ -26,4 +30,5 @@ public interface PreferencesHelper {
      */
     void saveLocationTrackingPref(int requestingLocationState);
 
+    int getCurrentTrailId();
 }

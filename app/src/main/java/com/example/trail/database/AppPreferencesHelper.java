@@ -23,19 +23,33 @@ public class AppPreferencesHelper implements PreferencesHelper {
 //    (temp) private final SharedPreferences sharedPreferences;
     SharedPreferences sharedPreferences;
 
+    // TODO ./constants/AppConstants 로 옮기기!!
+    // is first execution after app install or app update
+    private static final String PREF_KEY_IS_FIRST_EXECUTION = "PREF_KEY_IS_FIRST_EXECUTION";
     private static final String PREF_KEY_COOKIE_NAME = "PREF_KEY_COOKIE_NAME";
 
     // true: is foreground service / false: service is stopped, or mainactivity is on focus
     private static final String PREF_KEY_LOCATION_SERVICE_FOREGROUND_ENABLED = "PREF_KEY_LOCATION_SERVICE_FOREGROUND_ENABLED";
     // -2: error or 'empty path' / -1: stopped locating / 0: paused locating / 1: locating
     private static final String PREF_KEY_LOCATION_SERVICE_STATE = "PREF_KEY_LOCATION_SERVICE_STATE";
+    // the ID for the current Trail(journey)
+    private static final String PREF_KEY_CURRENT_TRAIL_ID = "PREF_KEY_CURRENT_TRAIL_ID";
 
     public AppPreferencesHelper(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("SAVE_LOGIN_DATA", false);
-        editor.putBoolean("FIRST_EXECUTE", true);
+        editor.putBoolean("FIRST_EXECUTE", true);   // todo 아래 isFirstExecution()에서 해줌 -> 필요 ㄴㄴ
         editor.apply();
+    }
+
+    @Override
+    public boolean isFirstExecution() {
+        boolean isFirst = sharedPreferences.getBoolean(PREF_KEY_IS_FIRST_EXECUTION, true);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(PREF_KEY_IS_FIRST_EXECUTION, false);
+        editor.apply();
+        return isFirst;
     }
 
     @Override
@@ -55,11 +69,16 @@ public class AppPreferencesHelper implements PreferencesHelper {
         return sharedPreferences.getInt("USER_ID", -1);
     }
 
+    @Override
+    public String getUserName() {
+        return sharedPreferences.getString("USERNAME", "");
+    }
+
     public void setUserAuth(UserDTO userDTO) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("USER_ID", userDTO.getUserId());
         editor.putString("EMAIL", userDTO.getEmail());  // todo 지우기?
-        editor.putString("NICKNAME", userDTO.getUserName());
+        editor.putString("USERNAME", userDTO.getUserName());
         editor.putString("USER_IMG", userDTO.getUserImg());
         editor.putString("JOURNEY_TYPE", userDTO.getJourneyType());
         editor.putString("LIFE_STYLE", userDTO.getLifeStyle());
@@ -76,7 +95,7 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     /**
-     * Returns true if requesting location updates, otherwise returns false.
+     * Returns integer code for service state.
      */
     @Override
     public int getLocationTrackingState() {
@@ -108,4 +127,16 @@ public class AppPreferencesHelper implements PreferencesHelper {
 //        return context.getString(R.string.location_updated,
 //                DateFormat.getDateTimeInstance().format(new Date()));
 //    }
+
+
+    @Override
+    public int getCurrentTrailId() {
+        return sharedPreferences.getInt("PREF_KEY_CURRENT_TRAIL_ID", -1);
+    }
+
+    public void saveCurrentTrailId(int journeyId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("PREF_KEY_CURRENT_TRAIL_ID", journeyId);
+        editor.apply();
+    }
 }

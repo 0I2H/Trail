@@ -85,7 +85,7 @@ public class LoginViewModel extends BaseViewModel {
                     .subscribeOn(getNetworkHelper().getSchedulerIo())
                     .observeOn(getNetworkHelper().getSchedulerUi())
                     .subscribe(login -> {
-                        Log.i(TAG, String.valueOf(login.isLogin()));
+                        Log.i(TAG, String.valueOf(login.message));
                         loginLiveData.setValue(login);
 //                        if(login.isLogin) {         // if login was successful,
 //                            requestUserAuth();      // get user info (userAuthLiveData)

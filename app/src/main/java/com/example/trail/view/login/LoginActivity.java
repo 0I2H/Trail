@@ -33,6 +33,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
 
     // DI
     LoginViewModel viewModel;
+
     @Inject
     AppPreferencesHelper appPreferencesHelper;
     @Inject

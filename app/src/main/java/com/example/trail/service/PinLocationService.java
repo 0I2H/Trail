@@ -8,6 +8,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
@@ -25,26 +28,51 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.example.trail.R;
 import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.model.login.LoginDTO;
+import com.example.trail.model.pin.PinDTO;
 import com.example.trail.network.helper.NetworkHelper;
+import com.example.trail.network.retrofit.RetrofitService;
 import com.example.trail.utils.Utils;
 import com.example.trail.view.dashboard.DashboardActivity;
 import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.hilt.EntryPoint;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.AndroidEntryPoint;
 import dagger.hilt.android.scopes.ServiceScoped;
 import dagger.hilt.internal.ComponentEntryPoint;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static com.example.trail.constants.AppConstants.EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION;
 import static com.example.trail.constants.AppConstants.EXTRA_LOCATION;
@@ -55,6 +83,7 @@ import static com.example.trail.constants.AppConstants.EXTRA_LOCATION;
  * (2021.05.31)
  */
 @ServiceScoped
+@AndroidEntryPoint
 public final class PinLocationService extends Service {
 
     @Inject
@@ -62,6 +91,10 @@ public final class PinLocationService extends Service {
     @Inject
     NetworkHelper networkHelper;
 
+    private CompositeDisposable compositeDisposable;
+
+    // https://developer.android.com/training/location/geofencing#create-geofence-objects
+    private GeofencingClient geofencingClient;
 
     /* (별거 아님)
      * Checks whether the bound activity has really gone away (foreground service with notification
@@ -95,18 +128,23 @@ public final class PinLocationService extends Service {
 //    public static final String EXTRA_LOCATION = "";
 //    private static final String EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION = "/"
 
+
+    @Override
     public void onCreate() {
+        super.onCreate();
         Log.d(TAG, "onCreate() called");
 
         // FIXME 임시(temp)
-        appPreferencesHelper = new AppPreferencesHelper(this);
+//        appPreferencesHelper = new AppPreferencesHelper(this);
+
+        compositeDisposable = new CompositeDisposable();
 
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(TimeUnit.SECONDS.toMillis(5));      // 5초에 한번
-        locationRequest.setFastestInterval(TimeUnit.SECONDS.toMillis(5));  // *log 주기*: location data update time (min)
+        locationRequest.setInterval(TimeUnit.SECONDS.toMillis(10));      // 30초에 한번
+        locationRequest.setFastestInterval(TimeUnit.SECONDS.toMillis(10));  // *(최소) log 주기*: location data update time (min)
         locationRequest.setMaxWaitTime(TimeUnit.MINUTES.toMillis(2));       // location data update max (wait) time
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
@@ -124,9 +162,7 @@ public final class PinLocationService extends Service {
                 // TODO: 이 정보 데이터베이스에 저장하기 (PinsDBControl)
                 /** changes */
                 // Sends location to server
-//                networkHelper.
-
-
+//          fixme      uploadPin(currentLocation);
 
                 // Notify our Activity that a new location was added. Again, if this was a
                 // production app, the Activity would be listening for changes to a database
@@ -148,6 +184,8 @@ public final class PinLocationService extends Service {
                 }
             }
         };
+
+        geofencingClient = LocationServices.getGeofencingClient(this);
     }
 
     @Override
@@ -201,6 +239,7 @@ public final class PinLocationService extends Service {
 
     public void onDestroy() {
         Log.d(TAG, "onDestroy() called");
+        compositeDisposable.clear();
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -311,24 +350,156 @@ public final class PinLocationService extends Service {
         }
     }
 
-// TODO    public void requestLogin(LoginDTO loginDTO) {
+    public CompositeDisposable getCompositeDisposable() {
+        return compositeDisposable;
+    }
+
+    public RetrofitService getRetrofitService() {
+        return networkHelper.getRetrofitService();
+    }
+
+    public NetworkHelper getNetworkHelper() {
+        return networkHelper;
+    }
+
+    public void uploadPin (Location currentLocation) throws FileNotFoundException {
+        String placeName = getPlaceName(currentLocation.getLatitude(), currentLocation.getLongitude());
+        String pinTime = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        String journeysId = String.valueOf(appPreferencesHelper.getCurrentTrailId());
+//        int journeysId = appPreferencesHelper.getCurrentTrailId();
+        journeysId = "2";
+        String latitude = String.valueOf(currentLocation.getLatitude());
+        String longitude = String.valueOf(currentLocation.getLongitude());
+        String status = "1";  // FIXME 다른 값 - 0:  기록 O / 1:  기록 X
+        String userId = String.valueOf(appPreferencesHelper.getUserID());
+        String userName = appPreferencesHelper.getUserName();
+//                int userId = appPreferencesHelper.getUserID();
+//
+//        PinDTO pinDTO = new PinDTO(placeName, pinTime, journeysId, latitude, longitude, status, userId, userName);
+//
+//        // test
+//        // fixme
+//        JSONObject j = new JSONObject();
 //        try {
+//            j.put("placeName", placeName);
+//            j.put("pinTime", pinTime);
+//            j.put("journeysId", journeysId);
+//            j.put("latitude", latitude);
+//            j.put("longitude", longitude);
+//            j.put("status", status);
+//            j.put("userId", userId);
+//            j.put("userName", userName);
+//
+//        } catch (JSONException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        File filedir = getApplicationContext().getFilesDir();
+//        File file = new File(filedir, "image"+ ".png");
+//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//        mBitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
+//        byte[] bitmapdata = bos.toByteArray();
+//
+//
+//        FileOutputStream fos = new FileOutputStream(file);
+//        fos.write(bitmapdata);
+//        fos.flush();
+//        fos.close();
+//
+//
+//        MultipartBody.Part test = MultipartBody.Part.createFormData("file", "false", RequestBody.create(MediaType.get(""), new File("")));
+//        RequestBody q = RequestBody.create(MediaType.parse("body"), j.toString());
+
+
+        try {
 //            getCompositeDisposable()
-//                    .add(getRetrofitService().loginUser(loginDTO.getEmail(), loginDTO.getPassword())
+//                    .add(getRetrofitService().uploadPlace(placeName, )
 //                            .subscribeOn(getNetworkHelper().getSchedulerIo())
 //                            .observeOn(getNetworkHelper().getSchedulerUi())
-//                            .subscribe(login -> {
-//                                Log.i(TAG, String.valueOf(login.isLogin()));
-//                                loginLiveData.setValue(login);
-////                        if(login.isLogin) {         // if login was successful,
-////                            requestUserAuth();      // get user info (userAuthLiveData)
-////                            loginClicked.setValue(false);
-////                        } else {
-////                            loginClicked.setValue(false);
-////          ㅁ              }
+//                            .subscribe(response -> {
+//
+//                                Toast.makeText(this, "응답 옴:" + response, Toast.LENGTH_SHORT).show();
+//                                if (response.uploadSuccess) {
+//                                    Log.i(TAG, "Successfully uploaded! (Place Id: " + response.place.id + ")");
+//                                } else {
+//                                    Log.e(TAG, "Error uploading pin location to server!");
+//                                }
 //                            }, throwable -> Log.e(TAG, throwable.getMessage())));
-//        } catch (Exception e) {
-//            Log.e(TAG, e.getMessage());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    // get default pinName by location address
+    public String getPlaceName (double lat, double lng) {
+        String pinAddress = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            pinAddress = obj.getAddressLine(0);
+//     fixme       pinAddress = pinAddress + "\n" + obj.getCountryName();
+//            pinAddress = pinAddress + "\n" + obj.getCountryCode();
+//            pinAddress = pinAddress + "\n" + obj.getAdminArea();
+//            pinAddress = pinAddress + "\n" + obj.getPostalCode();
+//            pinAddress = pinAddress + "\n" + obj.getSubAdminArea();
+//            pinAddress = pinAddress + "\n" + obj.getLocality();
+//            pinAddress = pinAddress + "\n" + obj.getSubThoroughfare();
+
+            Log.v("IGA", "Address" + pinAddress);
+            // Toast.makeText(this, "Address=>" + pinAddress,
+            // Toast.LENGTH_SHORT).show();
+
+            // TennisAppActivity.showDialog(pinAddress);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        return pinAddress;
+    }
+
+//    private void setGeofencingClient() {
+//        geofencingClient.addGeofences(getGeofencingRequest(), getGeo)
+//    }
+
+//    // defines a PendingIntent that starts a BroadcastReceiver:
+//    private PendingIntent getGeofencePendingIntent() {
+//        // Reuse the PendingIntent if we already have it.
+//        if (geofencePendingIntent != null) {
+//            return geofencePendingIntent;
 //        }
+//        Intent intent = new Intent(this, GeofenceBroadcastReceiver.class);
+//        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+//        // calling addGeofences() and removeGeofences().
+//        geofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.
+//                FLAG_UPDATE_CURRENT);
+//        return geofencePendingIntent;
+//    }
+//
+//    public void addGeofences () {
+//        geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
+//                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        // Geofences added
+//                        // ...
+//                    }
+//                })
+//                .addOnFailureListener(this, new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        // Failed to add geofences
+//                        // ...
+//                    }
+//                });
+//    }
+//
+//    private GeofencingRequest getGeofencingRequest() {
+//        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+//        builder.addGeofences(geofenceList);
+//        return builder.build();
 //    }
 }

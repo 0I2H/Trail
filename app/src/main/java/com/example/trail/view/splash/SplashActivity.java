@@ -6,27 +6,35 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.trail.BR;
 import com.example.trail.R;
+import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.databinding.ActivitySplashBinding;
 import com.example.trail.base.BaseActivity;
+import com.example.trail.network.helper.NetworkHelper;
 import com.example.trail.view.login.LoginActivity;
+import com.example.trail.view.walkthrough.WalkthroughActivity;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-
-import static com.example.trail.constants.AppConstants.PREFS_NAME;
 
 @AndroidEntryPoint
 public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashViewModel> {
 
     public static final String TAG = "SplashActivity";
 
-    // @Inject 이 Hilt에서는 OnCreate()에서처럼으로
     SplashViewModel viewModel;
     private ActivitySplashBinding binding;
+
+    // @Inject 이 Hilt에서는 OnCreate()에서처럼으로
+    @Inject
+    AppPreferencesHelper appPreferencesHelper;
+    @Inject
+    NetworkHelper networkHelper;
 
     @Override
     public int getBindingVariable() {
@@ -55,22 +63,21 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
          viewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(this.getApplication(), this)).get(SplashViewModel.class);
         // == <Kotlin> private val viewModel: MyViewModel by viewModels()
 
-
         binding = getViewDataBinding();
 
-//        viewModel.setNavigator(this);   // fixme Necessary?
+        // TODO make splash screen wait untill the animation finishes (thread로 강제 sleep은 좋은 방법이 아님)
+        /** 애니메이션!! */
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         checkApkVersion();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);  // todo vm ㅇㅡ로 옮기기
-//        if(!sharedPreferences.getBoolean(
-//                MyO
-//        ))
-        //fixme
-        goToLoginActivity();
+
+        if (appPreferencesHelper.isFirstExecution())
+            showWalkThrough();  // 첫 실행: first execution after app install
+        else
+            goToLoginActivity();
     }
 
     public void checkApkVersion() {     // check for APK version updates
@@ -82,7 +89,9 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
         startActivity(intent);
     }
 
-//    public void showWalkThrough() {
+    public void showWalkThrough() {
+        Intent intent = new Intent(this, WalkthroughActivity.class);
+        startActivity(intent);
 //        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 //        boolean hasLoginInfo = hasLoginInfo();
 //        if (!hasLoginInfo && sharedPreferences.getBoolean(IS_FIRST_IN, true)) {
@@ -91,7 +100,5 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
 //            if (hasLoginInfo)
 //                goToActivity()
 //        }
-//    }
-
-
+    }
 }

@@ -17,4 +17,11 @@ public class MapViewModel extends BaseViewModel {
     public MapViewModel(SavedStateHandle savedStateHandle) {
         super(savedStateHandle);
     }
+
+    public void onLocationStateBtnClicked() {
+
+    }
+    public void pinMarkerSelected() {
+
+    }
 }

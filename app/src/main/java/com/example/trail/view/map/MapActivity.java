@@ -10,18 +10,31 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.trail.BR;
 import com.example.trail.R;
 import com.example.trail.base.BaseActivity;
+import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.databinding.ActivityMapBinding;
+import com.example.trail.network.helper.NetworkHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MapActivity extends BaseActivity<ActivityMapBinding, MapViewModel> implements OnMapReadyCallback {
 
     public static final String TAG = "MapActivity";
 
     MapViewModel viewModel;
+
+    @Inject
+    AppPreferencesHelper appPreferencesHelper;
+    @Inject
+    NetworkHelper networkHelper;
+
     private ActivityMapBinding binding;
 
     @Override
@@ -45,8 +58,15 @@ public class MapActivity extends BaseActivity<ActivityMapBinding, MapViewModel> 
 
         viewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(this.getApplication(), this))
                 .get(MapViewModel.class);
+        viewModel.setNetworkHelper(networkHelper);
+
         binding = getViewDataBinding();
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+
         initMap();
+
+        observeViewModel();
     }
 
 

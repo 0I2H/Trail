@@ -17,7 +17,7 @@ import dagger.hilt.android.components.ServiceComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
-@InstallIn({SingletonComponent.class, ServiceComponent.class, FragmentComponent.class})
+@InstallIn({SingletonComponent.class, ServiceComponent.class})
 @Module
 public final class AppModule {
 

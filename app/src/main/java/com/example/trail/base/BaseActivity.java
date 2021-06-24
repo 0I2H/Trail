@@ -1,5 +1,6 @@
 package com.example.trail.base;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 

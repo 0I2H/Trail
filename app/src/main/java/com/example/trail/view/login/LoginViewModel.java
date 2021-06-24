@@ -84,15 +84,9 @@ public class LoginViewModel extends BaseViewModel {
                     .add(getRetrofitService().loginUser(loginDTO.getEmail(), loginDTO.getPassword())
                     .subscribeOn(getNetworkHelper().getSchedulerIo())
                     .observeOn(getNetworkHelper().getSchedulerUi())
-                    .subscribe(login -> {
+                    .subscribe(login -> {   // or loginLiveData::setValue
                         Log.i(TAG, String.valueOf(login.message));
                         loginLiveData.setValue(login);
-//                        if(login.isLogin) {         // if login was successful,
-//                            requestUserAuth();      // get user info (userAuthLiveData)
-//                            loginClicked.setValue(false);
-//                        } else {
-//                            loginClicked.setValue(false);
-//          ㅁ              }
                     }, throwable -> Log.e(TAG, throwable.getMessage())));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());

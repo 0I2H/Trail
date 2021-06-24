@@ -3,6 +3,7 @@ package com.example.trail.di.component;
 import com.example.trail.TrailApplication;
 import com.example.trail.di.module.ActivityModule;
 import com.example.trail.di.module.AppModule;
+import com.example.trail.di.module.FragmentModule;
 import com.example.trail.di.module.NetworkModule;
 
 import javax.inject.Singleton;

@@ -19,10 +19,9 @@ import javax.inject.Inject;
 public abstract class BaseFragment<T extends ViewDataBinding, V extends BaseViewModel> extends Fragment {
     private BaseActivity activity;
     private View rootView;
-    private T binding;
 
+    private T binding;
 //    private V viewModel;
-    @Inject
     protected V viewModel;      // 왜 이렇게?
 
     /**
@@ -58,7 +57,7 @@ public abstract class BaseFragment<T extends ViewDataBinding, V extends BaseView
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         viewModel = getViewModel();
-        viewModel.setNetworkHelper(activity.networkHelper);
+//        viewModel.setNetworkHelper(activity.networkHelper);
         setHasOptionsMenu(false);       // TODO 해석!!!
 
         super.onCreate(savedInstanceState);

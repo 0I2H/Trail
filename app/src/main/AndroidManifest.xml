@@ -33,6 +33,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <!-- Recommended for Android 9 (API level 28) and lower. -->
         <!-- Required for Android 10 (API level 29) and higher. -->
@@ -53,9 +56,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.login.LoginActivity"/>
-        <activity android:name=".view.signup.SignUpActivity">
-        </activity>
+        <activity android:name=".view.login.LoginActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".view.signup.SignUpActivity"/>
         <activity android:name=".view.main.MainActivity" />
         <activity android:name=".view.dashboard.DashboardActivity"
             android:launchMode="singleInstance">
@@ -67,7 +70,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.map.MapActivity"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"/>
+        <activity android:name=".view.record.RecordActivity">
 
 
             <intent-filter>

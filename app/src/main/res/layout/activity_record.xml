@@ -3,13 +3,13 @@
     xmlns:android = "http://schemas.android.com/apk/res/android"
     xmlns:app = "http://schemas.android.com/apk/res-auto"
     xmlns:tools = "http://schemas.android.com/tools"
-    tools:context="com.example.trail.view.history.HistoryActivity">
+    tools:context="com.example.trail.view.record.RecordActivity">
 
     <data>
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.example.trail.view.history.HistoryViewModel"/>
+            type="com.example.trail.view.record.RecordViewModel"/>
     </data>
 
     <LinearLayout

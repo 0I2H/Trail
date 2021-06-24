@@ -15,6 +15,9 @@ public class AppConstants {
 //    public static final String
 
 
+    public static final String JSON_KEY = "json";
+
+
 
     public static final String PREF_KEY_LOCATION_SERVICE_STATE = "PREF_KEY_LOCATION_SERVICE_STATE";
 
@@ -24,4 +27,6 @@ public class AppConstants {
     public static final String EXTRA_LOCATION = "EXTRA_LOCATION";
     public static final String EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION = "EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION";
     public static final String EXTRA_TRAIL_ID = "EXTRA_TRAIL_ID";
+    public static final String EXTRA_PIN_DTO = "EXTRA_PIN_DTO";
+
 }

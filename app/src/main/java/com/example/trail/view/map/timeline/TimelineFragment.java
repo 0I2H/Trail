@@ -1,35 +1,30 @@
-package com.example.trail.view.timeline;
+package com.example.trail.view.map.timeline;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.trail.BR;
 import com.example.trail.R;
 import com.example.trail.base.BaseFragment;
 import com.example.trail.databinding.FragmentTimelineBinding;
+import com.example.trail.model.pin.PinDTO;
 import com.example.trail.network.helper.NetworkHelper;
-import com.example.trail.view.map.MapViewModel;
+import com.example.trail.view.map.PinListAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import dagger.hilt.android.scopes.FragmentScoped;
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 public class TimelineFragment extends BaseFragment<FragmentTimelineBinding, TimelineViewModel>  {
 
-//    @Inject
+    @Inject
     NetworkHelper networkHelper;
 
     TimelineViewModel viewModel;
@@ -37,6 +32,9 @@ public class TimelineFragment extends BaseFragment<FragmentTimelineBinding, Time
     private FragmentTimelineBinding binding;
 
     private TimelineClickListener listener;
+
+    static PinListAdapter pinListAdapter;
+    Context activityContext;
 
     @Override
     public int getBindingVariable() {
@@ -53,7 +51,9 @@ public class TimelineFragment extends BaseFragment<FragmentTimelineBinding, Time
         return viewModel;
     }
 
-    public static TimelineFragment newInstance() {
+    public static TimelineFragment newInstance(PinListAdapter adapter) {
+        pinListAdapter = adapter;
+
         Bundle args = new Bundle();
         TimelineFragment fragment = new TimelineFragment();
         fragment.setArguments(args);
@@ -66,10 +66,10 @@ public class TimelineFragment extends BaseFragment<FragmentTimelineBinding, Time
 //    }
 
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -82,21 +82,30 @@ public class TimelineFragment extends BaseFragment<FragmentTimelineBinding, Time
         binding = getViewDataBinding();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+
+        initRecyclerView(activityContext, pinListAdapter);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        this.activityContext = context;
+
+
         // todo https://www.simplifiedcoding.net/bottom-sheet-android/
 //        dismissAllowingStateLoss();
     }
-
 
     @Override
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+    public void initRecyclerView(Context context, PinListAdapter adapter) {
+        binding.pinRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        binding.pinRecyclerView.setAdapter(adapter);
     }
 
     class TimelineBottomSheet extends BottomSheetDialogFragment {
@@ -107,4 +116,8 @@ public class TimelineFragment extends BaseFragment<FragmentTimelineBinding, Time
         void onItemClick(String item);
     }
 
+    public void goRecordActivity(PinDTO pinDTO) {
+        // activity's intent
+        // todo
+    }
 }

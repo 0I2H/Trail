@@ -20,6 +20,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
+
+import static com.example.trail.constants.AppConstants.JSON_KEY;
 
 
 public interface RetrofitService {
@@ -75,26 +78,34 @@ public interface RetrofitService {
             @Part("body") RequestBody body
     );
 
+//    @POST("/api/place/update")
+//    @FormUrlEncoded
+//    Single<MessageDTO> updatePlace (
+//            @Field("image") String image,
+//            @Field("placeName") String placeName,
+//            @Field("pinTime") String pinTime,
+//            @Field("journeysId") int journeyId,
+//            @Field("category") String category,
+//            @Field("note") String note,
+//            @Field("longitude") double longitude,
+//            @Field("latitude") double latitude,
+//            @Field("status") int status,
+//            @Field("userId") int userId,
+//            @Field("userName") int userName
+//    );
+
     @POST("/api/place/update")
     @FormUrlEncoded
     Single<MessageDTO> updatePlace (
-            @Field("image") String image,
-            @Field("placeName") String placeName,
-            @Field("pinTime") String pinTime,
-            @Field("journeysId") int journeyId,
-            @Field("category") String category,
-            @Field("note") String note,
-            @Field("longitude") double longitude,
-            @Field("latitude") double latitude,
-            @Field("status") int status,
-            @Field("userId") int userId,
-            @Field("userName") int userName
+            @Field(JSON_KEY) String PinDTO
     );
 
-    @GET("/api/place/journey")
-    Single<List<PinDTO>> getJourneyPins();
+    @GET("/api/place/journey/{journeysId}")
+    Single<List<PinDTO>> getJourneyPins(
+            @Path("journeysId") int id
+    );
 
-    @GET("/api/journey/upload")
+    @GET("/api/place/list")
     Single<List<PinDTO>> getTotalPins();
 
     @POST("/api/journey/upload")

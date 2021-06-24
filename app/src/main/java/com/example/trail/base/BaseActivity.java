@@ -96,4 +96,9 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
     @Override
     public void onFragmentDetached(String tag) { }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }

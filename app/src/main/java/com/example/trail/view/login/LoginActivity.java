@@ -89,7 +89,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
                     viewModel.setLoginClicked(false);
                 }
             }
-            Toast.makeText(this, "로그인으아아아", Toast.LENGTH_SHORT).show();
         });
 
         viewModel.getSignUpClicked().observe(this, state -> {

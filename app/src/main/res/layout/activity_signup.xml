@@ -29,6 +29,13 @@
             android:textSize="36sp"
             android:textStyle="bold" />
 
+        <FrameLayout
+            android:id="@+id/signup_fragment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <include layout="@layout/fragment_signup_steps"/>
+
 
     </LinearLayout>
 

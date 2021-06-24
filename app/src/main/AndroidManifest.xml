@@ -57,7 +57,8 @@
         <activity android:name=".view.signup.SignUpActivity">
         </activity>
         <activity android:name=".view.main.MainActivity" />
-        <activity android:name=".view.dashboard.DashboardActivity">
+        <activity android:name=".view.dashboard.DashboardActivity"
+            android:launchMode="singleInstance">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +66,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.map.MapActivity"/>
+        <activity android:name=".view.map.MapActivity"
+            android:launchMode="singleInstance">
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

@@ -25,4 +25,7 @@
 <!--    !이거 대신 gradle.properties에 정의해놨음-->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCeDezNTdpuqy0zM7sM74I4opk4kmZhiV8</string>
     <string name="map_id" translatable="false">4ecc2fa4c0c87e05</string>
+
+    <!-- 참고용 -->
+    <string name="SHA1SigningCertificateDigitalThumbprint"> A4:79:56:75:B6:DA:0C:2D:2F:13:88:D4:D7:5C:1B:E3:FA:D7:5B:33</string>
 </resources>

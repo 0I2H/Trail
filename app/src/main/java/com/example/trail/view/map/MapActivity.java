@@ -1,5 +1,6 @@
 package com.example.trail.view.map;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,11 @@ import com.example.trail.base.BaseActivity;
 import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.databinding.ActivityMapBinding;
 import com.example.trail.network.helper.NetworkHelper;
+import com.example.trail.view.dashboard.DashboardActivity;
+import com.example.trail.view.profile.ProfileActivity;
+import com.example.trail.view.timeline.TimelineFragment;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,7 +29,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class MapActivity extends BaseActivity<ActivityMapBinding, MapViewModel> implements OnMapReadyCallback {
+public class MapActivity extends BaseActivity<ActivityMapBinding, MapViewModel> implements OnMapReadyCallback, TimelineFragment.TimelineClickListener {
 
     public static final String TAG = "MapActivity";
 
@@ -36,6 +41,7 @@ public class MapActivity extends BaseActivity<ActivityMapBinding, MapViewModel> 
     NetworkHelper networkHelper;
 
     private ActivityMapBinding binding;
+    private GoogleMap googleMap;
 
     @Override
     public int getBindingVariable() {
@@ -56,6 +62,7 @@ public class MapActivity extends BaseActivity<ActivityMapBinding, MapViewModel> 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         viewModel = new ViewModelProvider(this, new SavedStateViewModelFactory(this.getApplication(), this))
                 .get(MapViewModel.class);
         viewModel.setNetworkHelper(networkHelper);
@@ -72,24 +79,60 @@ public class MapActivity extends BaseActivity<ActivityMapBinding, MapViewModel> 
 
     @Override
     public void observeViewModel() {
-
+        viewModel.getIntentActionLiveData().observe(this, action -> {
+            Intent intent;
+            switch (action) {
+                // TODO
+                case "goBack":
+                    this.finish();
+                    break;
+                case "SettingsActivity":
+                case "DashboardActivity":
+                    intent = new Intent(this, DashboardActivity.class);
+//                    intent.putExtra(EXTRA_TRAIL_ID, binding.);  // todo journeysId
+                    startActivity(intent);
+                    break;
+            }
+        });
     }
 
 
     // Get a handle to the fragment and register the callback.
     public void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        GoogleMapOptions options = new GoogleMapOptions();
+        options.mapType(GoogleMap.MAP_TYPE_NORMAL)
+                .mapToolbarEnabled(true)
+                .zoomControlsEnabled(true)
+                .compassEnabled(true)
+                .rotateGesturesEnabled(true)
+                .tiltGesturesEnabled(true);
+
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance(options);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.map, mapFragment)
+                .commit();
+
+
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     // Get a handle to the GoogleMap object and display marker.
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(0, 0))
                 .title("Marker"));
 //        googleMap.setMapStyle(GoogleMap.MAP_TYPE_SATELLITE)
+    }
+
+    @Override
+    public void onItemClick(String item) {
+        // TODO
     }
 
     // todo 나중에 이걸로 대체

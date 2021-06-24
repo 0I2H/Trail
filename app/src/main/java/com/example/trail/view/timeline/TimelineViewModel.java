@@ -8,12 +8,12 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
-@HiltViewModel
+//@HiltViewModel
 public class TimelineViewModel extends BaseViewModel {
 
     public static final String TAG = "TimelineViewModel";
 
-    @Inject
+//    @Inject
     public TimelineViewModel(SavedStateHandle savedStateHandle) {
         super(savedStateHandle);
     }

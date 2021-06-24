@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/shape_white_round"
+            android:background="@drawable/shape_white_round_opaque"
             android:paddingHorizontal="20dp"
             android:paddingTop="50dp"
             android:paddingBottom="20dp">
@@ -48,10 +48,14 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
                 app:endIconDrawable="@drawable/ic_logo"
                 app:endIconCheckable="true"
                 app:endIconTint="@color/black"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -60,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_email"
                     android:textSize="14sp"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,7 +77,6 @@
                 app:boxStrokeWidth="1dp"
                 app:hintAnimationEnabled="true"
                 app:helperTextEnabled="true"
-                app:helperText="비밀번호"
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
@@ -89,8 +92,10 @@
                     android:hint="@string/hint_password"
                     app:textInputLayoutFocusedRectEnabled="false"
                     android:textSize="14sp"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:inputType="textPassword"/>
+<!--
+                app:helperText="비밀번호"-->
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -100,6 +105,8 @@
                 android:textColor="@color/text_orange"
                 android:textSize="14sp"
                 android:text="@string/button_forgot_password"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
                 android:onClick="@{() -> viewModel.onChangePasswordClick()}"/>
 
             <ImageButton
@@ -131,8 +138,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:foreground="@drawable/shape_highlight_round"
+            android:backgroundTint="?attr/selectableItemBackground"
+            android:background="@drawable/shape_highlight_round"
             android:padding="10dp"
             android:layout_marginHorizontal="80dp"
             android:textAlignment="center"

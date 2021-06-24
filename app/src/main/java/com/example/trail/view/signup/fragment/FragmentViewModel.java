@@ -27,4 +27,8 @@ public class FragmentViewModel extends BaseViewModel {
     public void setProfilePhoto() {
 
     }
+
+    public void inflateStep(int step) {
+
+    }
 }

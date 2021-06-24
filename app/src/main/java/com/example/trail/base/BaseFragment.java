@@ -57,10 +57,11 @@ public abstract class BaseFragment<T extends ViewDataBinding, V extends BaseView
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         viewModel = getViewModel();
         viewModel.setNetworkHelper(activity.networkHelper);
         setHasOptionsMenu(false);       // TODO 해석!!!
+
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable

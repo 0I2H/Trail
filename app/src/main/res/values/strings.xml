@@ -12,6 +12,7 @@
 
     /* general */
     <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
     <string name="settings">Settings</string>
 
     <string name="email">Email</string>
@@ -38,10 +39,47 @@
     <string name="account_created">Account Created</string>
     <string name="button_complete">Complete</string>
 
+    <string name="dialog_title_journey_type">Set Journey Type</string>
+    <string name="dialog_title_lifestyle">Set Lifesyle</string>
+
+
     /* dashboard */
     <string name="heading_dashboard">Dashboard</string>
 
 
+    /* user preferences */
+    <string-array name="journey_type">
+        <item>Adventure</item>
+        <item>Popular Places</item>
+        <item>Hipster</item>
+        <item>Solo Traveller</item>
+        <item>Nomadic</item>
+        <item>Food Lover</item>
+        <item>Geek</item>
+        <item>Shopping</item>
+        <item>History</item>
+        <item>Local Places</item>
+        <item>Festival</item>
+        <item>Art</item>
+        <item>Academic</item>
+    </string-array>
+
+    <string-array name="lifestyle">
+        <item>Active</item>
+        <item>Bohemian</item>
+        <item>Hipster</item>
+        <item>Solo</item>
+        <item>Nomadic</item>
+        <item>Rural</item>
+        <item>Traditional</item>
+        <item>Back to the Land</item>
+        <item>Digital</item>
+        <item>Workaholic</item>
+        <item>Socialite</item>
+        <item>Academic</item>
+        <item>Groupie</item>
+        <item>Minimalist</item>
+    </string-array>
 
 
 

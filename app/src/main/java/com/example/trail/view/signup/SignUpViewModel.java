@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle;
 
 import com.example.trail.base.BaseViewModel;
 import com.example.trail.database.AppPreferencesHelper;
+import com.example.trail.model.message.MessageDTO;
 import com.example.trail.model.user.UserDTO;
 import com.example.trail.network.helper.NetworkHelper;
 
@@ -19,33 +20,54 @@ public class SignUpViewModel extends BaseViewModel {
 
     public static final String TAG = "SignUpViewModel";
 
-    @Inject
-    AppPreferencesHelper appPreferencesHelper;
-    @Inject
-    NetworkHelper networkHelper;
 
-    private final MutableLiveData<UserDTO> signUpLiveData;
+    private MutableLiveData<MessageDTO> serverResponseLiveData;
+    private MutableLiveData<Boolean> onNextBtnClicked, onSetProfilePhotoClicked, onSetPreferencesClicked;
 
     @Inject
     public SignUpViewModel(SavedStateHandle savedStateHandle) {
         super(savedStateHandle);
-        this.signUpLiveData = new MutableLiveData<>();
+        this.serverResponseLiveData = new MutableLiveData<>();
+        this.onNextBtnClicked = new MutableLiveData<>(false);
+        this.onSetProfilePhotoClicked = new MutableLiveData<>(false);
+        this.onSetPreferencesClicked = new MutableLiveData<>(false);
     }
 
-    public MutableLiveData<UserDTO> getSignUpLiveData() {
-        return signUpLiveData;
+    public MutableLiveData<MessageDTO> getServerResponse() {
+        return serverResponseLiveData;
+    }
+
+    public MutableLiveData<Boolean> getOnNextBtnClicked() {
+        return onNextBtnClicked;
+    }
+
+    public MutableLiveData<Boolean> getOnSetProfilePhotoClicked() {
+        return onSetProfilePhotoClicked;
+    }
+
+    public MutableLiveData<Boolean> getOnSetPreferencesClicked() {
+        return onSetPreferencesClicked;
+    }
+
+    public void onNextBtnClicked() {
+        onNextBtnClicked.setValue(true);
+    }
+
+    public void setProfilePhoto() {
+
+    }
+
+    public void setPreferences() {
+        onSetPreferencesClicked.setValue(true);
     }
 
     public void requestSignUp(UserDTO userDTO) {
         try {
             getCompositeDisposable()
-                    .add(getRetrofitService().signupUser("", "", "", "", "")
+                    .add(getRetrofitService().signupUser(userDTO.getEmail(), userDTO.getPassword(), userDTO.getUserName(), userDTO.getJourneyType(), userDTO.getLifeStyle())
                     .subscribeOn(getNetworkHelper().getSchedulerIo())
                     .observeOn(getNetworkHelper().getSchedulerUi())
-                    .subscribe(join -> {
-                        Log.i(TAG, String.valueOf(join.message));
-//                        loginLiveData.setValue(join);
-                    }, throwable -> Log.e(TAG, throwable.getMessage())));
+                    .subscribe(serverResponseLiveData::setValue, throwable -> Log.e(TAG, throwable.getMessage())));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }

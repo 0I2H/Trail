@@ -39,10 +39,10 @@ public interface RetrofitService {
 
     @POST("/api/user/register")
     @FormUrlEncoded
-    Single<UserDTO> signupUser (
-            @Field("userName") String userName,
+    Single<MessageDTO> signupUser (
             @Field("email") String email,
             @Field("password") String password,
+            @Field("userName") String userName,
             @Field("lifeStyle") String lifeStyle,
             @Field("journeyType") String journeyType
     );

@@ -19,4 +19,10 @@
     </style>
 
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@drawable/shape_white_round_opaque</item>
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
+
 </resources>

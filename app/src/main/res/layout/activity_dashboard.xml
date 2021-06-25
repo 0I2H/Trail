@@ -158,7 +158,6 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/shape_circle_border"
-                android:backgroundTint="@color/primary"
                 android:gravity="center"
                 android:text="210"
                 android:textAlignment="center"

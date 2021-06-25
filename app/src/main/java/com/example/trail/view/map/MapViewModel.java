@@ -32,7 +32,6 @@ public class MapViewModel extends BaseViewModel {
     private MutableLiveData<List<MarkerOptions>> markerListLiveData;
     private MutableLiveData<PolylineOptions> polylineOptionsLiveData;
 
-//    Bitmap markerIcon = ""; // todo
 
     @Inject
     public MapViewModel(SavedStateHandle savedStateHandle) {

@@ -8,6 +8,10 @@ import java.io.Serializable;
 public class MessageDTO implements Serializable {
     public boolean uploadSuccess;
 
+    public boolean registerSuccess;
+
+    public String message;
+
     public TrailDTO journey;
 
     public PinDTO place;
@@ -21,6 +25,22 @@ public class MessageDTO implements Serializable {
 
     public void setUploadSuccess(boolean uploadSuccess) {
         this.uploadSuccess = uploadSuccess;
+    }
+
+    public boolean isRegisterSuccess() {
+        return registerSuccess;
+    }
+
+    public void setRegisterSuccess(boolean registerSuccess) {
+        this.registerSuccess = registerSuccess;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public TrailDTO getJourney() {

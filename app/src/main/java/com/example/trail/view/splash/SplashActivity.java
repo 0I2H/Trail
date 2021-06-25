@@ -87,6 +87,7 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
     public void goToLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void showWalkThrough() {
@@ -100,5 +101,6 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
 //            if (hasLoginInfo)
 //                goToActivity()
 //        }
+        finish();
     }
 }

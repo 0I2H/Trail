@@ -30,6 +30,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+
     }
 }
 
@@ -48,6 +49,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit2Version"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit2Version"
     implementation "com.squareup.retrofit2:adapter-rxjava3:$rootProject.ext.retrofit2Version"
+
 
 
     // reactive

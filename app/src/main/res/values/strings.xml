@@ -81,6 +81,14 @@
         <item>Minimalist</item>
     </string-array>
 
+    <string name="heading_record">Record</string>
+    <string name="heading_trail">Create New Journey</string>
+
+
+    <string name="dialog_camera_btn">Camera</string>
+    <string name="dialog_gallery_btn">Gallery</string>
+    <string name="dialog_cancel_btn">Cancel</string>
+
 
 
 </resources>

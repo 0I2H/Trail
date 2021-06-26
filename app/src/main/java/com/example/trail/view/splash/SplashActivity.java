@@ -1,11 +1,14 @@
 package com.example.trail.view.splash;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -65,6 +68,8 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
 
         binding = getViewDataBinding();
 
+        getPermission(this);
+
         // TODO make splash screen wait untill the animation finishes (thread로 강제 sleep은 좋은 방법이 아님)
         /** 애니메이션!! */
     }
@@ -72,12 +77,25 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
     @Override
     protected void onResume() {
         super.onResume();
+        checkPermissions();
         checkApkVersion();
 
         if (appPreferencesHelper.isFirstExecution())
             showWalkThrough();  // 첫 실행: first execution after app install
         else
             goToLoginActivity();
+    }
+
+
+    /**
+     * Returns the current state of the permissions needed.
+     */
+    // TODO 더 추가하기
+    private boolean checkPermissions() {
+//        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                && ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) !=
+//                && ActivityCompat.checkSelfPermission(this, Manifest.permission_group.CAMERA);
+        return true;
     }
 
     public void checkApkVersion() {     // check for APK version updates
@@ -103,4 +121,6 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding, SplashVi
 //        }
         finish();
     }
+
+
 }

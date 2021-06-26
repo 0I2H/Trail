@@ -1,12 +1,15 @@
 package com.example.trail.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,12 +17,17 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.trail.TrailApplication;
 import com.example.trail.database.AppPreferencesHelper;
 import com.example.trail.network.helper.NetworkHelper;
+import com.example.trail.utils.Utils;
 import com.example.trail.view.splash.SplashViewModel;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import dagger.hilt.android.scopes.ActivityScoped;
+
+import static com.example.trail.constants.AppConstants.PERMISSION_REQUEST_CODE;
 
 /** https://github.com/MindorksOpenSource/android-mvvm-architecture */
 // Activity 별로 extend해가면 됨
@@ -102,4 +110,34 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
         super.onBackPressed();
         this.finish();
     }
+
+    public static void getPermission(Activity activity) {
+        ActivityCompat.requestPermissions(activity, Utils.requestPermission, PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
 }
+

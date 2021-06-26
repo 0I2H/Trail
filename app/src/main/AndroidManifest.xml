@@ -12,6 +12,11 @@
       Android 10 (API level 29) and higher. -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:name=".TrailApplication"
         android:allowBackup="true"
@@ -45,9 +50,21 @@
             android:exported="true"
             android:foregroundServiceType="location">
         </service>
-        
         <receiver android:name=".service.GeofenceBroadcastReceiver" />
 
+
+
+        <!--        For add_photo_background.xml uris (Nougat 이상) -->
+        <!--        xml/filepaths 참고하면 파일명 지정해 놨음-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.trail.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
 
         <activity android:name=".view.splash.SplashActivity">
             <intent-filter>
@@ -71,15 +88,15 @@
         </activity>
         <activity android:name=".view.map.MapActivity"
             android:launchMode="singleInstance"/>
-        <activity android:name=".view.record.RecordActivity">
-
-
+        <activity android:name=".view.record.RecordActivity"/>
+        <activity android:name=".view.profile.ProfileActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
     </application>
 

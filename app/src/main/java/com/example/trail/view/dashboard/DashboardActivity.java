@@ -146,8 +146,10 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
                 case 1:
                     /** Start Location tracking */
                     if (!checkPermissions()) requestPermissions();
-                    else locationService.subscribeToLocationUpdates();
-                    setButtonsState(1);        // Restore the state of the buttons when the activity (re)launches.
+                    else {
+                        locationService.subscribeToLocationUpdates();
+                        setButtonsState(1);        // Restore the state of the buttons when the activity (re)launches.
+                    }
                     break;
 
                 case 0:

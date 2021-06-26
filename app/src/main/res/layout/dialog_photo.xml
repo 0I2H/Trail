@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="imageUtil"
+            type="com.example.trail.utils.ImageFileUtils" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_white_round_10dp"
+        android:backgroundTint="@color/testing"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/camera_image_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/dialog_camera_btn"
+            android:textColor="@color/text_dark_gray"
+            android:onClick="@{() -> imageUtil.openCamera()}"/>
+
+
+        <Button
+            android:id="@+id/gallery_image_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/dialog_gallery_btn"
+            android:textColor="@color/text_dark_gray"
+            android:onClick="@{() -> imageUtil.openGallery()}"/>
+
+        <Button
+            android:id="@+id/cancel_btn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:text="@string/dialog_cancel_btn"
+            android:textColor="@color/white"
+            android:onClick="@{() -> imageUtil.closeDialog()}"/>
+
+
+    </LinearLayout>
+
+</layout>

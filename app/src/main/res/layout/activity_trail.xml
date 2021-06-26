@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android = "http://schemas.android.com/apk/res/android"
-    xmlns:app = "http://schemas.android.com/apk/res-auto"
-    xmlns:tools = "http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.trail.view.trail.TrailActivity">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="com.example.trail.view.trail.TrailViewModel"/>
+            type="com.example.trail.view.trail.TrailViewModel" />
     </data>
 
     <LinearLayout
@@ -21,135 +22,240 @@
         android:padding="20dp">
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/heading_trail"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_white_round_opaque"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="50dp"
+            android:paddingBottom="20dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/journey_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:endIconCheckable="true"
+                app:endIconDrawable="@drawable/ic_logo"
+                app:endIconTint="@color/black"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/set_journey_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="journey name"
+                    android:inputType="textEmailAddress"
+                    android:padding="15dp"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:endIconCheckable="true"
+                app:endIconDrawable="@drawable/ic_logo"
+                app:endIconTint="@color/black"
+                app:errorEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/set_"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="journey name"
+                    android:inputType="textEmailAddress"
+                    android:padding="15dp"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--
+                            app:helperText="비밀번호"-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/accompany"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_logo"
+            app:endIconTint="@color/black"
+            app:errorEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/set_accompany"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="journey name"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/freq"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_logo"
+            app:endIconTint="@color/black"
+            app:errorEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pin_frequency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="journey name"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_text_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_logo"
+            app:endIconTint="@color/black"
+            app:errorEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="journey name"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/summary_note"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_logo"
+            app:endIconTint="@color/black"
+            app:errorEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="journey name"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/id3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_logo"
+            app:endIconTint="@color/black"
+            app:errorEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/shared_flag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="journey name"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 <!--        <TextView-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:onClick="@{() -> viewModel.onChangePasswordClick()}"-->
+<!--            android:padding="5dp"-->
+<!--            android:text="@string/button_forgot_password"-->
 <!--            android:textAlignment="textStart"-->
-<!--            android:textAllCaps="true"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textStyle="bold"-->
-<!--            android:textSize="36sp"-->
-<!--            android:letterSpacing="0.1"-->
-<!--            android:padding="10dp"-->
-<!--            android:text="@string/heading_login"/>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:background="@drawable/shape_white_round_opaque"-->
-<!--            android:paddingHorizontal="20dp"-->
-<!--            android:paddingTop="50dp"-->
-<!--            android:paddingBottom="20dp">-->
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/email_text_input_layout"-->
-<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:boxCornerRadiusBottomEnd="10dp"-->
-<!--                app:boxCornerRadiusBottomStart="10dp"-->
-<!--                app:boxCornerRadiusTopEnd="10dp"-->
-<!--                app:boxCornerRadiusTopStart="10dp"-->
-<!--                app:endIconDrawable="@drawable/ic_logo"-->
-<!--                app:endIconCheckable="true"-->
-<!--                app:endIconTint="@color/black"-->
-<!--                app:errorEnabled="false"-->
-<!--                >-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/email_input"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:hint="@string/hint_email"-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:padding="15dp"-->
-<!--                    android:inputType="textEmailAddress" />-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/password_text_input_layout"-->
-<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:boxStrokeWidth="1dp"-->
-<!--                app:hintAnimationEnabled="true"-->
-<!--                app:helperTextEnabled="true"-->
-<!--                app:boxCornerRadiusBottomEnd="10dp"-->
-<!--                app:boxCornerRadiusBottomStart="10dp"-->
-<!--                app:boxCornerRadiusTopEnd="10dp"-->
-<!--                app:boxCornerRadiusTopStart="10dp"-->
-<!--                app:passwordToggleEnabled="true"-->
-<!--                app:passwordToggleTint="@color/highlight">-->
-<!--                &lt;!&ndash;                app:boxBackgroundColor="@color/white"&ndash;&gt;-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/password_input"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:hint="@string/hint_password"-->
-<!--                    app:textInputLayoutFocusedRectEnabled="false"-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:padding="5dp"-->
-<!--                    android:inputType="textPassword"/>-->
-<!--                &lt;!&ndash;-->
-<!--                                app:helperText="비밀번호"&ndash;&gt;-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textAlignment="textStart"-->
-<!--                android:textColor="@color/text_orange"-->
-<!--                android:textSize="14sp"-->
-<!--                android:text="@string/button_forgot_password"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:padding="5dp"-->
-<!--                android:onClick="@{() -> viewModel.onChangePasswordClick()}"/>-->
-
-<!--            <ImageButton-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="end"-->
-<!--                android:background="@drawable/shape_highlight_round"-->
-<!--                android:src="@drawable/ic_arrow_forward"-->
-<!--                android:padding="15dp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                app:tint="@color/white"-->
-<!--                android:onClick="@{() -> viewModel.onLoginClick()}"/>-->
-<!--            &lt;!&ndash;            android:clickable="@{viewModel.loginClicked}"&ndash;&gt;-->
-
-<!--        </LinearLayout>-->
-
-
-
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="@color/text_gray"-->
-<!--            android:textSize="14sp"-->
-<!--            android:text="@string/text_create_account"-->
-<!--            android:layout_marginTop="80dp"-->
-<!--            android:layout_marginBottom="5dp"/>-->
-
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:backgroundTint="?attr/selectableItemBackground"-->
-<!--            android:background="@drawable/shape_highlight_round"-->
-<!--            android:padding="10dp"-->
-<!--            android:layout_marginHorizontal="80dp"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="14sp"-->
-<!--            android:letterSpacing="0.2"-->
-<!--            android:text="@string/button_sign_up"-->
-<!--            android:textAllCaps="true"-->
-<!--            android:onClick="@{() -> viewModel.onSignUpClick()}"/>-->
-
-
+<!--            android:textColor="@color/text_orange"-->
+<!--            android:textSize="14sp" />-->
     </LinearLayout>
-</layout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/text_create_account"
+        android:textAlignment="center"
+        android:textColor="@color/text_gray"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:background="@drawable/shape_highlight_round"
+        android:backgroundTint="?attr/selectableItemBackground"
+        android:letterSpacing="0.2"
+        android:onClick="@{() -> viewModel.onCreateTrailClick()}"
+        android:padding="10dp"
+        android:text="@string/button_sign_up"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+
+</LinearLayout></layout>

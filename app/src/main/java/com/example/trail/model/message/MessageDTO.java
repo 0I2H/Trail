@@ -10,6 +10,8 @@ public class MessageDTO implements Serializable {
 
     public boolean registerSuccess;
 
+    public String comment;
+
     public String message;
 
     public TrailDTO journey;
@@ -33,6 +35,14 @@ public class MessageDTO implements Serializable {
 
     public void setRegisterSuccess(boolean registerSuccess) {
         this.registerSuccess = registerSuccess;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getMessage() {

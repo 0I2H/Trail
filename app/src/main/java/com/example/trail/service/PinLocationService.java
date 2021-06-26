@@ -12,8 +12,10 @@ import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Parcelable;
@@ -93,6 +95,8 @@ public final class PinLocationService extends Service {
 
     private CompositeDisposable compositeDisposable;
 
+    String mCurrentPhotoPath = "";
+
     // https://developer.android.com/training/location/geofencing#create-geofence-objects
     private GeofencingClient geofencingClient;
 
@@ -162,7 +166,11 @@ public final class PinLocationService extends Service {
                 // TODO: 이 정보 데이터베이스에 저장하기 (PinsDBControl)
                 /** changes */
                 // Sends location to server
-//          fixme      uploadPin(currentLocation);
+                try {
+                    uploadPin(currentLocation);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
                 // Notify our Activity that a new location was added. Again, if this was a
                 // production app, the Activity would be listening for changes to a database
@@ -375,7 +383,7 @@ public final class PinLocationService extends Service {
         String userName = appPreferencesHelper.getUserName();
 //                int userId = appPreferencesHelper.getUserID();
 //
-//        PinDTO pinDTO = new PinDTO(placeName, pinTime, journeysId, latitude, longitude, status, userId, userName);
+        PinDTO pinDTO = new PinDTO(placeName, pinTime, journeysId, latitude, longitude, status, userId, userName);
 //
 //        // test
 //        // fixme
@@ -389,7 +397,7 @@ public final class PinLocationService extends Service {
 //            j.put("status", status);
 //            j.put("userId", userId);
 //            j.put("userName", userName);
-//
+////
 //        } catch (JSONException e) {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
@@ -409,22 +417,41 @@ public final class PinLocationService extends Service {
 //
 //        MultipartBody.Part test = MultipartBody.Part.createFormData("file", "false", RequestBody.create(MediaType.get(""), new File("")));
 //        RequestBody q = RequestBody.create(MediaType.parse("body"), j.toString());
+//        Uri uri = data.getData();
+        File file = null;
+        try {
+            file = createImageFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image"), file);
+
+        RequestBody body1 = RequestBody.create(MediaType.parse("placeName"), Utils.jsonConverter(pinDTO.getPlaceName()));
+        RequestBody body2 = RequestBody.create(MediaType.parse("pinTime"), Utils.jsonConverter(pinDTO.getPinTime()));
+        RequestBody body3 = RequestBody.create(MediaType.parse("journeysId"), Utils.jsonConverter(pinDTO.getJourneysId()));
+        RequestBody body4 = RequestBody.create(MediaType.parse("longitude"), Utils.jsonConverter(pinDTO.getLongitude()));
+        RequestBody body5 = RequestBody.create(MediaType.parse("latitude"), Utils.jsonConverter(pinDTO.getLatitude()));
+        RequestBody body6 = RequestBody.create(MediaType.parse("status"), Utils.jsonConverter(pinDTO.getStatus()));
+        RequestBody body7 = RequestBody.create(MediaType.parse("userId"), Utils.jsonConverter(pinDTO.getUserId()));
+        RequestBody body8 = RequestBody.create(MediaType.parse("userName"), Utils.jsonConverter(pinDTO.getUserName()));
 
 
         try {
-//            getCompositeDisposable()
-//                    .add(getRetrofitService().uploadPlace(placeName, )
-//                            .subscribeOn(getNetworkHelper().getSchedulerIo())
-//                            .observeOn(getNetworkHelper().getSchedulerUi())
-//                            .subscribe(response -> {
-//
-//                                Toast.makeText(this, "응답 옴:" + response, Toast.LENGTH_SHORT).show();
-//                                if (response.uploadSuccess) {
+            getCompositeDisposable()
+                    .add(getRetrofitService().uploadPlace(fileBody, body1, body2, body3, body4, body5, body6, body7, body8)
+                            .subscribeOn(getNetworkHelper().getSchedulerIo())
+                            .observeOn(getNetworkHelper().getSchedulerUi())
+                            .subscribe(
+                                    response -> {
+
+                                Toast.makeText(this, "응답 옴:" + response, Toast.LENGTH_SHORT).show();
+//                         todo       if (response.uploadSuccess) {
 //                                    Log.i(TAG, "Successfully uploaded! (Place Id: " + response.place.id + ")");
 //                                } else {
 //                                    Log.e(TAG, "Error uploading pin location to server!");
 //                                }
-//                            }, throwable -> Log.e(TAG, throwable.getMessage())));
+                            }, throwable -> Log.e(TAG, throwable.getMessage())));
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -502,4 +529,22 @@ public final class PinLocationService extends Service {
 //        builder.addGeofences(geofenceList);
 //        return builder.build();
 //    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg"         /* suffix */
+//                storageDir      /* directory */
+        );
+//        File tempFile = new File(imagePath, editItem.photo);
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
 }

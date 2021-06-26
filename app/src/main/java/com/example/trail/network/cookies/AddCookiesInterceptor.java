@@ -1,6 +1,7 @@
 package com.example.trail.network.cookies;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.trail.database.AppPreferencesHelper;
 

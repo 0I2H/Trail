@@ -8,15 +8,20 @@ import com.example.trail.model.pin.PinDTO;
 import com.example.trail.model.trail.TrailDTO;
 import com.example.trail.model.user.UserDTO;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -29,7 +34,7 @@ public interface RetrofitService {
 
     @POST("/api/user/login")
     @FormUrlEncoded
-    Single<LoginDTO> loginUser (
+    Single<LoginDTO> loginUser(
             @Field("email") String email,
             @Field("password") String password
     );
@@ -39,7 +44,7 @@ public interface RetrofitService {
 
     @POST("/api/user/register")
     @FormUrlEncoded
-    Single<MessageDTO> signupUser (
+    Single<MessageDTO> signupUser(
             @Field("email") String email,
             @Field("password") String password,
             @Field("userName") String userName,
@@ -47,11 +52,12 @@ public interface RetrofitService {
             @Field("journeyType") String journeyType
     );
 
+    @Headers("Accept: application/json")
+    @Multipart
     @POST("/api/user/profile-upload")
-    @FormUrlEncoded
-    Single<UserDTO> uploadProfileImage (
-            @Field("image") String image,
-            @Field("userId") String userId
+    Single<MessageDTO> uploadProfileImage(
+            @Part MultipartBody.Part file,
+            @Part("userId") RequestBody userId
     );
 
 //    @POST("/api/place/upload")
@@ -70,13 +76,37 @@ public interface RetrofitService {
 //            @Field("userName") RequestBody userName
 //    );
 
+
+//    @Multipart
+//    @POST("/api/place/upload")
+//    @FormUrlEncoded
+//    Single<MessageDTO> uploadPlace (
+////            @Part MultipartBody.Part image,
+//            @Part("body") RequestBody body
+//    );
+
     @Multipart
     @POST("/api/place/upload")
-    @FormUrlEncoded
-    Single<MessageDTO> uploadPlace (
-            @Part MultipartBody.Part image,
-            @Part("body") RequestBody body
+    Single<String> uploadPlace(
+            @Part("image") RequestBody file,
+            @Part("placeName") RequestBody placeName,
+            @Part("pinTime") RequestBody pinTime,
+            @Part("journeysId") RequestBody journeyId,
+//            @Field("category") String category,
+//            @Field("note") String note,
+            @Part("longitude") RequestBody longitude,
+            @Part("latitude") RequestBody latitude,
+            @Part("status") RequestBody status,
+            @Part("userId") RequestBody userId,
+            @Part("userName") RequestBody userName
+//            @Part("body") RequestBody pinDTO
     );
+
+//    @POST("/api/place/upload
+//    @FormUrlEncoded
+//    Single<String> uploadPlace (
+//            @Field(JSON_KEY) String PinDTO
+//    );
 
 //    @POST("/api/place/update")
 //    @FormUrlEncoded
@@ -96,7 +126,7 @@ public interface RetrofitService {
 
     @POST("/api/place/update")
     @FormUrlEncoded
-    Single<MessageDTO> updatePlace (
+    Single<MessageDTO> updatePlace(
             @Field(JSON_KEY) String PinDTO
     );
 

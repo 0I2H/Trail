@@ -1,4 +1,4 @@
-package com.example.trail.view.trail;
+package com.example.trail.view.walkthrough;
 
 import androidx.lifecycle.SavedStateHandle;
 
@@ -9,14 +9,10 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class TrailViewModel extends BaseViewModel {
+public class WalkthroughViewModel extends BaseViewModel {
 
     @Inject
-    public TrailViewModel(SavedStateHandle savedStateHandle) {
+    public WalkthroughViewModel(SavedStateHandle savedStateHandle) {
         super(savedStateHandle);
-    }
-
-    public void onCreateTrailClick() {
-
     }
 }

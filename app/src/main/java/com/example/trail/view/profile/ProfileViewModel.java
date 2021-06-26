@@ -95,22 +95,15 @@ public class ProfileViewModel extends BaseViewModel {
                 .method("POST", body)
                 .build();
 
-        class WorkerThread extends Thread {
-            @Override
-            public void run() {
-                try {
-                    Response response = client.newCall(request).execute();
-                    Log.i(TAG, response.body().string());
+        new Thread(() -> {
+            try {
+                Response response = client.newCall(request).execute();
+                Log.i(TAG, response.body().string());
 
-                } catch (Exception e) {
-                    Log.e(TAG, "");
-                }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
             }
-        }
-
-        WorkerThread w = new WorkerThread();
-        w.start();
-
+        }).start();
     }
 
 //    private void uploadFile(File file) {

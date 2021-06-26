@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -33,6 +34,7 @@ import com.example.trail.model.login.LoginDTO;
 import com.example.trail.model.pin.PinDTO;
 import com.example.trail.network.helper.NetworkHelper;
 import com.example.trail.network.retrofit.RetrofitService;
+import com.example.trail.utils.ImageFileUtils;
 import com.example.trail.utils.Utils;
 import com.example.trail.view.dashboard.DashboardActivity;
 import com.google.android.gms.common.util.SharedPreferencesUtils;
@@ -74,8 +76,12 @@ import dagger.hilt.internal.ComponentEntryPoint;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
+import static com.example.trail.constants.ApiConstants.BASE_URL;
 import static com.example.trail.constants.AppConstants.EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION;
 import static com.example.trail.constants.AppConstants.EXTRA_LOCATION;
 
@@ -95,7 +101,11 @@ public final class PinLocationService extends Service {
 
     private CompositeDisposable compositeDisposable;
 
-    String mCurrentPhotoPath = "";
+    public static final String url = BASE_URL + "/api/place/upload";
+
+    ImageFileUtils imageFileUtils;
+    File defaultImageFile;
+
 
     // https://developer.android.com/training/location/geofencing#create-geofence-objects
     private GeofencingClient geofencingClient;
@@ -194,6 +204,11 @@ public final class PinLocationService extends Service {
         };
 
         geofencingClient = LocationServices.getGeofencingClient(this);
+
+
+        imageFileUtils = new ImageFileUtils(this, false);
+        // get a dummy JPG file for API
+        defaultImageFile = ImageFileUtils.bitmapToFile(this, BitmapFactory.decodeResource(this.getResources(), R.drawable.default_profile_img), "");
     }
 
     @Override
@@ -373,17 +388,20 @@ public final class PinLocationService extends Service {
     public void uploadPin (Location currentLocation) throws FileNotFoundException {
         String placeName = getPlaceName(currentLocation.getLatitude(), currentLocation.getLongitude());
         String pinTime = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.getDefault()).format(new Date());
-        String journeysId = String.valueOf(appPreferencesHelper.getCurrentTrailId());
-//        int journeysId = appPreferencesHelper.getCurrentTrailId();
-        journeysId = "2";
+        int journeysId = appPreferencesHelper.getCurrentTrailId();
+        if(journeysId < 0) {
+            Log.i(TAG, "Create a journey first");
+            journeysId = 2;
+        }
         String latitude = String.valueOf(currentLocation.getLatitude());
         String longitude = String.valueOf(currentLocation.getLongitude());
         String status = "1";  // FIXME 다른 값 - 0:  기록 O / 1:  기록 X
-        String userId = String.valueOf(appPreferencesHelper.getUserID());
+        int userId = appPreferencesHelper.getUserID();
+        String userId2 = String.valueOf(appPreferencesHelper.getUserID());
         String userName = appPreferencesHelper.getUserName();
 //                int userId = appPreferencesHelper.getUserID();
 //
-        PinDTO pinDTO = new PinDTO(placeName, pinTime, journeysId, latitude, longitude, status, userId, userName);
+//        PinDTO pinDTO = new PinDTO(placeName, pinTime, journeysId, latitude, longitude, status, userId, userName);
 //
 //        // test
 //        // fixme
@@ -418,43 +436,61 @@ public final class PinLocationService extends Service {
 //        MultipartBody.Part test = MultipartBody.Part.createFormData("file", "false", RequestBody.create(MediaType.get(""), new File("")));
 //        RequestBody q = RequestBody.create(MediaType.parse("body"), j.toString());
 //        Uri uri = data.getData();
-        File file = null;
-        try {
-            file = createImageFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image"), file);
-
-        RequestBody body1 = RequestBody.create(MediaType.parse("placeName"), Utils.jsonConverter(pinDTO.getPlaceName()));
-        RequestBody body2 = RequestBody.create(MediaType.parse("pinTime"), Utils.jsonConverter(pinDTO.getPinTime()));
-        RequestBody body3 = RequestBody.create(MediaType.parse("journeysId"), Utils.jsonConverter(pinDTO.getJourneysId()));
-        RequestBody body4 = RequestBody.create(MediaType.parse("longitude"), Utils.jsonConverter(pinDTO.getLongitude()));
-        RequestBody body5 = RequestBody.create(MediaType.parse("latitude"), Utils.jsonConverter(pinDTO.getLatitude()));
-        RequestBody body6 = RequestBody.create(MediaType.parse("status"), Utils.jsonConverter(pinDTO.getStatus()));
-        RequestBody body7 = RequestBody.create(MediaType.parse("userId"), Utils.jsonConverter(pinDTO.getUserId()));
-        RequestBody body8 = RequestBody.create(MediaType.parse("userName"), Utils.jsonConverter(pinDTO.getUserName()));
 
 
-        try {
-            getCompositeDisposable()
-                    .add(getRetrofitService().uploadPlace(fileBody, body1, body2, body3, body4, body5, body6, body7, body8)
-                            .subscribeOn(getNetworkHelper().getSchedulerIo())
-                            .observeOn(getNetworkHelper().getSchedulerUi())
-                            .subscribe(
-                                    response -> {
+//        try {
+//            getCompositeDisposable()
+//                    .add(getRetrofitService().uploadPlace(fileBody, body1, body2, body3, body4, body5, body6, body7, body8)
+//                            .subscribeOn(getNetworkHelper().getSchedulerIo())
+//                            .observeOn(getNetworkHelper().getSchedulerUi())
+//                            .subscribe(
+//                                    response -> {
+//
+//                                Toast.makeText(this, "응답 옴:" + response, Toast.LENGTH_SHORT).show();
+////                         todo       if (response.uploadSuccess) {
+////                                    Log.i(TAG, "Successfully uploaded! (Place Id: " + response.place.id + ")");
+////                                } else {
+////                                    Log.e(TAG, "Error uploading pin location to server!");
+////                                }
+//                            }, throwable -> Log.e(TAG, throwable.getMessage())));
+//        } catch (Exception e) {
+//            Log.e(TAG, e.getMessage());
+//        }
 
-                                Toast.makeText(this, "응답 옴:" + response, Toast.LENGTH_SHORT).show();
-//                         todo       if (response.uploadSuccess) {
-//                                    Log.i(TAG, "Successfully uploaded! (Place Id: " + response.place.id + ")");
-//                                } else {
-//                                    Log.e(TAG, "Error uploading pin location to server!");
-//                                }
-                            }, throwable -> Log.e(TAG, throwable.getMessage())));
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
+        RequestBody imageRequestBody = RequestBody.create(MediaType.parse("application/octet-stream"), defaultImageFile);
+
+        OkHttpClient client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        MediaType mediaType = MediaType.parse("text/plain");
+        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("image", defaultImageFile.getName(), imageRequestBody)
+                .addFormDataPart("placeName", Utils.jsonConverter(placeName))
+                .addFormDataPart("pinName", Utils.jsonConverter(pinTime))
+                .addFormDataPart("journeyId", Utils.jsonConverter(String.valueOf(journeysId)))
+                .addFormDataPart("category", Utils.jsonConverter(""))
+                .addFormDataPart("note", Utils.jsonConverter(""))
+                .addFormDataPart("latitude", Utils.jsonConverter(latitude))
+                .addFormDataPart("longitude", Utils.jsonConverter(longitude))
+                .addFormDataPart("status", Utils.jsonConverter(status))
+                .addFormDataPart("userId", Utils.jsonConverter(userId2))
+                .addFormDataPart("userName", Utils.jsonConverter(userName))
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .build();
+
+        new Thread(() -> {
+            try {
+                Response response = client.newCall(request).execute();
+                Log.i(TAG, response.body().string());
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }).start();
     }
 
     // get default pinName by location address
@@ -530,21 +566,21 @@ public final class PinLocationService extends Service {
 //        return builder.build();
 //    }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_DCIM), "Camera");
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg"         /* suffix */
-//                storageDir      /* directory */
-        );
-//        File tempFile = new File(imagePath, editItem.photo);
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+////        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+////                Environment.DIRECTORY_DCIM), "Camera");
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg"         /* suffix */
+////                storageDir      /* directory */
+//        );
+////        File tempFile = new File(imagePath, editItem.photo);
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+//        return image;
+//    }
 }

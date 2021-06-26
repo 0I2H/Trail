@@ -25,6 +25,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.trail.BR;
 import com.example.trail.BuildConfig;
 import com.example.trail.R;
+import com.example.trail.TrailApplication;
+import com.example.trail.base.BaseActivity;
 import com.example.trail.databinding.DialogPhotoBinding;
 import com.example.trail.view.profile.ProfileActivity;
 
@@ -54,7 +56,7 @@ public class ImageFileUtils {
     private MutableLiveData<Intent> dialogEventLiveData;
 
 
-    public ImageFileUtils(Context context) {
+    public ImageFileUtils(Context context, boolean dialogShow) {
         activityContext = context;
 
         binding = DialogPhotoBinding.inflate(LayoutInflater.from(context));
@@ -63,9 +65,13 @@ public class ImageFileUtils {
 
         dialogEventLiveData = new MutableLiveData<>();
 
+
         pickImageDialog = new Dialog(context);
         pickImageDialog.setContentView(binding.getRoot());
-        pickImageDialog.show();
+
+        if (dialogShow) {
+            pickImageDialog.show();
+        }
     }
 
     public MutableLiveData<Intent> getDialogEventLiveData() {
@@ -97,26 +103,27 @@ public class ImageFileUtils {
         pickImageDialog.dismiss();
     }
 
-//    private File createEmptyFile() throws IOException {     // 카메라 추가인 경우
-//        // 이미지 파일 이름 (CODE: 포토) 즉 DB의 photo에 들어갈 것: "zekak_(시간)*.jpg")
-//        String timeStamp = new SimpleDateFormat("yyMMdd_HHmm").format(new Date());
-//        String ImageFileName = "trail_" + timeStamp;
-//
-//        // 이미지 저장될 폴더 이름, xml/filepaths참고 (Android/data/com.example.zekak/files/)
-//        File storageDir = activityContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        if (!storageDir.exists()) {   // 없으면 만듦
-//            storageDir.mkdirs();
-//        }
-//
-//        // 빈 파일 생성
-//        File image = File.createTempFile(ImageFileName, ".jpg", storageDir);
-//        return image;
-//    }
+    public static File createEmptyFile() throws IOException {     // 위치 기록을 위해, 빈 .jpg 사진 파일
+        // 이미지 파일 이름 (CODE: 포토) 즉 DB의 photo에 들어갈 것: "zekak_(시간)*.jpg")
+        String timeStamp = new SimpleDateFormat("yyMMdd_HHmm").format(new Date());
+        String ImageFileName = "trail_" + timeStamp;
+        String defaultFileName = "app/src/main/res/drawable/ic_launcher_logo.png";
+
+        // 이미지 저장될 폴더 이름, xml/filepaths참고 (Android/data/com.example.zekak/files/)
+        File storageDir = TrailApplication.getCurrentActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (!storageDir.exists()) {   // 없으면 만듦
+            storageDir.mkdirs();
+        }
+
+        // 빈 파일 생성
+        File image = File.createTempFile(ImageFileName, ".jpg", storageDir);
+        return image;
+    }
 
     public File compressImage(Bitmap bitmap) throws IOException {       // 현재 버튼 썸네일을 파일로 저장(원본X)
         File file = bitmapToFile(activityContext, bitmap, "compressed_");          // 복사할 file
         FileOutputStream fOut = new FileOutputStream(file);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 1, fOut);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 1, fOut);
         fOut.flush();
         fOut.close();
 
@@ -134,7 +141,7 @@ public class ImageFileUtils {
 
         // 이미지 파일 이름 (CODE: 포토) 즉 DB의 photo에 들어갈 것: "zekak_(시간)*.jpg")
         String timeStamp = new SimpleDateFormat("yyMMdd_HHmm").format(new Date());
-        String fileName = frontFileName + timeStamp;
+        String fileName = frontFileName + timeStamp + ".jpeg";
 
 
         //create a file to write bitmap data
@@ -145,7 +152,7 @@ public class ImageFileUtils {
 
             //Convert bitmap to byte array
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos); // YOU can also save it in JPEG
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, bos); // YOU can also save it in JPEG
             byte[] bitmapdata = bos.toByteArray();
 
             //write the bytes in file

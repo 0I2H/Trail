@@ -1,5 +1,6 @@
 package com.example.trail;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
@@ -19,9 +20,19 @@ public class TrailApplication extends Application {
 
 //    public static boolean DEBUG;
 
+    public static Activity currentActivity;
+
     @Override
     public void onCreate() {
         super.onCreate();
 //        DEBUG = isDebuggable(this)
+    }
+
+    public void setCurrentActivity(Activity activity) {
+        currentActivity = activity;
+    }
+
+    public static Activity getCurrentActivity() {
+        return currentActivity;
     }
 }

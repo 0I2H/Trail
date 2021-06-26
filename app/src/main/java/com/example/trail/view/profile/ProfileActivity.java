@@ -135,7 +135,7 @@ public class ProfileActivity extends BaseActivity<ActivityProfileBinding, Profil
             if (state) {
                 viewModel.getProfilePhotoClicked().setValue(false);
                 // Open dialog and get a Intent to start (gallery | camera)
-                imageFileUtils = new ImageFileUtils(this);  // todo if error, erase
+                imageFileUtils = new ImageFileUtils(this, true);  // todo if error, erase
                 imageFileUtils.getDialogEventLiveData().observe(this, action -> {
                     // deprecated
                     //  startActivityForResult(action, action.getIntExtra("requestCode", -1));
@@ -174,12 +174,7 @@ public class ProfileActivity extends BaseActivity<ActivityProfileBinding, Profil
                             binding.profilePhoto.setClipToOutline(true);
                             binding.profilePhoto.setAdjustViewBounds(true);
 
-//                            profileImageFile = imageFileUtils.bitmapToFile(getBaseContext(), imageBitmap, "profile_");
-                            try {
-                                profileImageFile = imageFileUtils.compressImage(imageBitmap);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            profileImageFile = ImageFileUtils.bitmapToFile(getBaseContext(), imageBitmap, "profile_");
 
                             try {
                                 setImage(profileImageFile);

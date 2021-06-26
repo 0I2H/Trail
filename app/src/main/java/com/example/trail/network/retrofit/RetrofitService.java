@@ -102,28 +102,6 @@ public interface RetrofitService {
 //            @Part("body") RequestBody pinDTO
     );
 
-//    @POST("/api/place/upload
-//    @FormUrlEncoded
-//    Single<String> uploadPlace (
-//            @Field(JSON_KEY) String PinDTO
-//    );
-
-//    @POST("/api/place/update")
-//    @FormUrlEncoded
-//    Single<MessageDTO> updatePlace (
-//            @Field("image") String image,
-//            @Field("placeName") String placeName,
-//            @Field("pinTime") String pinTime,
-//            @Field("journeysId") int journeyId,
-//            @Field("category") String category,
-//            @Field("note") String note,
-//            @Field("longitude") double longitude,
-//            @Field("latitude") double latitude,
-//            @Field("status") int status,
-//            @Field("userId") int userId,
-//            @Field("userName") int userName
-//    );
-
     @POST("/api/place/update")
     @FormUrlEncoded
     Single<MessageDTO> updatePlace(

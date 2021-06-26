@@ -80,6 +80,7 @@ public abstract class BaseActivity<T extends ViewDataBinding, V extends BaseView
         performDataBinding();
         // fixme 필요하면,주석해제
 //          initBaseActivity();
+        ((TrailApplication) getApplication()).setCurrentActivity(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  // why?
 //        observeViewModel();     // 06.03 이렇게 불러야 추가됐었던건가
 
